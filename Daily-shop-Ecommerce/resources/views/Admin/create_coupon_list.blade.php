@@ -6,9 +6,15 @@
     <button type="button" class="btn btn-success">Create Coupon</button>
 </a>
 <div class="row m-t-30">
-    <div class="alert alert-danger" role="alert">
-        {{session('message')}}
-    </div>
+@if(session()->has('message'))
+                    <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
+                        <span class="badge badge-pill badge-success"></span>
+                        {{session('message')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    @endif
     <div class="col-md-12">
         <!-- DATA TABLE-->
         <div class="table-responsive m-b-40">

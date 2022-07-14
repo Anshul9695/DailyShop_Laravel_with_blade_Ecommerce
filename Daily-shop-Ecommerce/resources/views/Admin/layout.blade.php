@@ -90,7 +90,7 @@
                                 <li class="@yield('select_category')">
                                     <a href="{{url('admin/create_category')}}">Create Category</a>
                                 </li>
-                                <li class="@yield('select_cat_list')">
+                                <li class="@yield('select_category')">
                                     <a href="{{url('admin/category')}}">Category List</a>
                                 </li>
                             </ul>

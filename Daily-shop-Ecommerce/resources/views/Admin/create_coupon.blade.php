@@ -15,9 +15,15 @@
 
 
 
-                <div class="sufee-alert alert with-close alert-primary alert-dismissible fade show">
-                {{session('message')}}
+                @if(session()->has('message'))
+                    <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
+                        <span class="badge badge-pill badge-success"></span>
+                        {{session('message')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
                     </div>
+                    @endif
                     <h3 class="text-center title-2">Generate The Coupon</h3>
                 </div>
                 <hr>
