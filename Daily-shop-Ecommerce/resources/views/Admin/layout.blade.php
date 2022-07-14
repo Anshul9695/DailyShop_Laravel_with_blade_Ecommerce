@@ -98,7 +98,7 @@
                       
                         <li class="@yield('select_coupon')">
                             <a class="js-arrow" href="#">
-                                <i class="fas fa-tachometer-alt"></i>Coupon Manger</a>
+                                <i class="fas fa-tag"></i>Coupon Manger</a>
                             <ul class="list-unstyled navbar__sub-list js-sub-list">
                                 <li>
                                     <a href="{{url('admin/coupon/index_coupon')}}">Create Coupon</a>
@@ -106,6 +106,29 @@
                                 <li>
                                     <a href="{{url('admin/coupon/coupon_list')}}">Coupon List</a>
                                 </li>
+                            </ul>
+                        </li>
+
+
+                        <li class="@yield('select_size')">
+                            <a class="js-arrow" href="#">
+                                <i class="fas fa-table"></i>Attirbuts Manager</a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list">
+                                <li class="@yield('select_size')">
+                                    <a href="{{url('admin/size/index')}}">Create Size</a>
+                                </li>
+                                <li class="@yield('size_list')">
+                                    <a href="{{url('admin/size/size_list')}}">Size List</a>
+                                </li>
+
+
+                                <li class="@yield('select_size')">
+                                    <a href="{{url('admin/color/index')}}">Create color</a>
+                                </li>
+                                <li class="@yield('size_list')">
+                                    <a href="{{url('admin/color/color_list')}}">color List</a>
+                                </li>
+                                
                             </ul>
                         </li>
 
