@@ -109,7 +109,6 @@
                             </ul>
                         </li>
 
-
                         <li class="@yield('select_size')">
                             <a class="js-arrow" href="#">
                                 <i class="fas fa-table"></i>Attirbuts Manager</a>
@@ -131,6 +130,20 @@
                                 
                             </ul>
                         </li>
+
+                        <li class="@yield('select_product')">
+                            <a class="js-arrow" href="#">
+                                <i class="fa-product-hunt"></i>Product Manger</a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list">
+                                <li class="@yield('select_product')">
+                                    <a href="{{url('admin/product/index')}}">Create Products</a>
+                                </li>
+                                <li class="@yield('select_product')">
+                                    <a href="{{url('admin/product/list')}}">Product List</a>
+                                </li>
+                            </ul>
+                        </li>
+
 
                     </ul>
                 </nav>
