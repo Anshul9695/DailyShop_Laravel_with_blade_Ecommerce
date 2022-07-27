@@ -145,6 +145,21 @@
                         </li>
 
 
+
+                        <li class="@yield('select_brand')">
+                            <a class="js-arrow" href="#">
+                                <i class="fa-product-hunt"></i>Brand Manger</a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list">
+                                <li class="@yield('create_brand')">
+                                    <a href="{{url('admin/product/brand/create')}}">Create brand</a>
+                                </li>
+                                <li class="@yield('brand_list')">
+                                    <a href="{{url('admin/product/brand/list')}}">Brand List</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
                     </ul>
                 </nav>
             </div>

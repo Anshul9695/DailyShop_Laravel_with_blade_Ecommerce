@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
+use App\Models\Size;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 
 class ProductController extends Controller
@@ -64,7 +67,7 @@ class ProductController extends Controller
         // echo '<pre>';
         // print_r($data);
         // die;
-        return view('Admin/product_list',compact('data'));
+        return view('Admin/product_list', compact('data'));
     }
     public function product_delete(Request $request, $id)
     {
@@ -90,14 +93,25 @@ class ProductController extends Controller
     {
         $data = Product::find($pid);
         $categories = Category::where(['status' => 1])->get();
-        return view('Admin/edit_product', compact(['data','categories']));
+        $sizes = Size::where(['status' => 1])->get();
+        $colors = Color::where(['status' => 1])->get();
+
+       // $result['productAttrArr']=DB::table('product_attr')->where(['product_id'=>$pid])->get();
+        // echo '<pre>';
+        // print_r($data['productAttrArr']);
+        // die;
+        return view('Admin/edit_product', compact(['data', 'categories', 'sizes', 'colors']));
     }
     public function product_update(Request $request)
     {
+        // return $request->post();
+        //    echo '<pre>';
+        //    print_r($request->post());
+        //     die;
         $request->validate([
             'category_id' => 'required',
             'product_name' => 'required',
-          //  'product_slug' => 'required',
+            //  'product_slug' => 'required',
             'product_brand' => 'required',
             'short_desc' => 'required',
             'desc' => 'required',
@@ -107,6 +121,9 @@ class ProductController extends Controller
             'warrenty' => 'required'
         ]);
         $product = Product::find($request->id);
+        // echo '<pre>';
+        // return $request->all();
+        // die;
         $product->product_name = $request->product_name;
         $product->category_id = $request->category_id;
         $product->product_slug = $request->product_slug;
@@ -126,7 +143,29 @@ class ProductController extends Controller
             $product->image = $filename;
         }
         $product->save();
-        $request->session()->flash('message','Product Updated Successfylly');
+        $skuArr = $request->post('sku');
+        $size_idArr = $request->post('size_id');
+        $color_idArr = $request->post('color_id');
+        $mrpArr = $request->post('mrp');
+        $priceArr = $request->post('price');
+        $qtyArr = $request->post('qty');
+       // $attr_imageArr = $request->post('attr_image');
+        foreach ($skuArr as $key => $value) {
+            $productAttrArr['product_id'] =$request->id;
+            $productAttrArr['size_id'] =$size_idArr[$key];
+            $productAttrArr['color_id'] =$color_idArr[$key];
+            $productAttrArr['sku'] =$mrpArr[$key];
+            $productAttrArr['mrp'] =$priceArr[$key];
+            $productAttrArr['price'] =$qtyArr[$key];
+            $productAttrArr['qty'] =$skuArr[$key];
+            $productAttrArr['attr_image'] ='1 test';
+         
+            DB::table('product_attr')->insert($productAttrArr);
+        }
+        // print_r($skuArr);
+        // die;
+
+        $request->session()->flash('message', 'Product Updated Successfylly');
         return redirect('admin/product/list');
     }
 }

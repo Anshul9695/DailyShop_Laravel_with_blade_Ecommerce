@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CouponController;
@@ -79,8 +80,16 @@ Route::group(['middleware' => 'admin_auth'], function () {
         Route::get('admin/product/list',[ProductController::class,'product_list']);
         Route::get('admin/product/delete/{id}',[ProductController::class,'product_delete']);
         Route::get('admin/product/status/{status}/{id}', [ProductController::class, 'status']);
-
         Route::get('admin/product/edit/{id}',[ProductController::class,'edit_prodcut']);
         Route::post('admin/product/update',[ProductController::class,'product_update']);
+
+
+//CREATE AND UPDATE FROM SAME FORM 
+        Route::get('admin/product/brand/list',[BrandController::class,'index']);
+        Route::get('admin/product/brand/create',[BrandController::class,'manage_brands']);
+        Route::get('admin/product/brand/create/{id}',[BrandController::class,'manage_brands']);
+        Route::post('admin/product/brand/manage_process',[BrandController::class,'manage_brands_process']);
+        Route::get('admin/product/brand/delete/{id}',[BrandController::class,'delete_brand']);
+        Route::get('admin/product/brand/status/{status}/{id}', [BrandController::class, 'status']);
 
 });
