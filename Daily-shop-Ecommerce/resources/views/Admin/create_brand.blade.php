@@ -25,11 +25,11 @@
                     <h3 class="text-center title-2">Create Brands</h3>
                 </div>
                 <hr>
-                <form action="{{url('admin/product/brand/manage_process')}}" method="post">
+                <form action="{{url('admin/product/brand/manage_process')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
 
-                    <input type="text" name="id" value="{{$id}}"/>
+                    <input type="hidden" name="id" value="{{$id}}"/>
                         <label for="cc-payment" class="control-label mb-1">BRAND NAME : </label>
                         <input id="cc-pament" name="name" value="{{$name}}" type="text" class="form-control" aria-required="true" aria-invalid="false" required>
                     </div>
@@ -42,8 +42,9 @@
 
                     <div class="form-group">
                         <label for="cc-payment" class="control-label mb-1">BRAND IMAGE</label>
-                        <input type="file" id="img" name="image" value="test" class="form-control col-md-7 col-xs-12">
-                        <img src="{" alt="tag" style="height:100px;width:100px;" >
+                        <input type="file" id="img" name="image" class="form-control col-md-7 col-xs-12">
+                       
+                        <img src="{{ asset('admin_assets/product_image/'.$image)}}"  style="height:100px;width:100px;" >
                     </div>
 
                     <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">

@@ -33,6 +33,7 @@
     <!-- Main CSS-->
     <link href="{{asset('admin_assets/css/theme.css')}}" rel="stylesheet" media="all">
 
+    
 </head>
 
 <body class="animsition">
@@ -155,6 +156,17 @@
                                 </li>
                                 <li class="@yield('brand_list')">
                                     <a href="{{url('admin/product/brand/list')}}">Brand List</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="@yield('select_coustomer')">
+                            <a class="js-arrow" href="#">
+                                <i class="fa-product-hunt"></i>Users Manger</a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list">
+                               
+                                <li class="@yield('select_coustomer')">
+                                    <a href="{{url('admin/coustomer/list')}}">Coustomers List</a>
                                 </li>
                             </ul>
                         </li>

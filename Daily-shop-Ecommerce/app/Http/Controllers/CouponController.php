@@ -29,6 +29,11 @@ class CouponController extends Controller
         $coupon->code = $request->post('code');
         $coupon->value = $request->post('value');
         $coupon->status = '0';
+
+
+        $coupon->type = $request->post('type');
+        $coupon->min_order_amt = $request->post('min_order_amt');
+        $coupon->is_once_time = $request->post('is_once_time');
         $coupon->save();
         $request->session()->flash('message', 'coupon created Successfylly');
         return redirect()->back();

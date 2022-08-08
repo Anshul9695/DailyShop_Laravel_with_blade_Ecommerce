@@ -77,8 +77,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="cc-payment" class="control-label mb-1">Product Brand</label>
-                        <input id="cc-pament" name="product_brand" type="text" class="form-control" aria-required="true" aria-invalid="false">
+                    <label for="color_id" class="control-label mb-1"> Product Brand</label>
+                              <select id="color_id" name="product_brand" class="form-control">
+                                  @foreach($brands as $brand)
+                                 <option value="{{$brand->id}}">{{$brand->name}}</option>        
+                                    @endforeach
+                              </select>
                     </div>
                     <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
                         <span class="badge badge-pill badge-success"></span>
@@ -200,6 +204,67 @@
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
+
+
+                    <h2 class="mb10">Add Extra Information</h2>
+            <div class="col-lg-12" id="product_attr_box">
+               <div class="card" id="product_attr">
+                  <div class="card-body">
+                     <div class="form-group">
+                        <div class="row">
+
+                        <div class="col-md-3">
+                              <label for="sku" class="control-label mb-1"> Lead Time</label>
+                              <input id="sku" name="lead_time" type="text" class="form-control" aria-required="true" aria-invalid="false" >
+                           </div>
+
+                           <div class="col-md-3">
+                              <label for="sku" class="control-label mb-1"> Tax</label>
+                              <input id="sku" name="tax" type="text" class="form-control" aria-required="true" aria-invalid="false" >
+                           </div>
+                           <div class="col-md-3">
+                              <label for="mrp" class="control-label mb-1"> Tax Type</label>
+                              <input id="mrp" name="tax_type" type="text" class="form-control" aria-required="true" aria-invalid="false">
+                           </div>
+                           <div class="col-md-3">
+                              <label for="color_id" class="control-label mb-1"> Is Promotainal</label>
+                              <select id="color_id" name="is_promo" class="form-control">    
+                                    <option value="1" selected>Yes</option>
+                                    <option value="0">No</option>
+                              </select>
+                           </div>
+                           <div class="col-md-3">
+                              <label for="color_id" class="control-label mb-1"> Is Featured Product</label>
+                              <select id="color_id" name="is_featured" class="form-control">
+                                  
+                                 <option value="1" selected>Yes</option>
+                                    <option value="0">No</option>
+                              </select>
+                           </div>
+                           <div class="col-md-3">
+                              <label for="color_id" class="control-label mb-1"> Is_Discount</label>
+                              <select id="color_id" name="is_discount" class="form-control">
+                                    
+                                 <option value="1" selected>Yes</option>
+                                    <option value="0">No</option>
+                              </select>
+                           </div>
+                           <div class="col-md-3">
+                              <label for="color_id" class="control-label mb-1"> Is Tranding</label>
+                              <select id="color_id" name="is_tranding" class="form-control">
+                                  
+                                 <option value="1" selected>Yes</option>
+                                    <option value="0">No</option>
+                              </select>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+
+
                     <div>
                         <button id="submit" type="submit" class="btn btn-lg btn-info btn-block">
                             Create Product

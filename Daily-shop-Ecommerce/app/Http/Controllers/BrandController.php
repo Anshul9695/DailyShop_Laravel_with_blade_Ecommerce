@@ -30,6 +30,10 @@ class BrandController extends Controller
     }
     public function manage_brands_process(Request $request)
     {
+        // $get_data=$request->all();
+        // echo '<pre>';
+        // print_r($get_data);
+        // die;
         $request->validate([
             'name' => 'required|unique:brands,name',
             'image' => 'required'
@@ -40,6 +44,13 @@ class BrandController extends Controller
         } else {
             $model = new Brand();
             $msg = "brand inserted";
+        }
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extention = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extention;
+            $file->move(public_path('admin_assets/product_image'), $filename);
+            $model->image = $filename;
         }
         $model->name = $request->post('name');
         $model->image = $request->post('image');

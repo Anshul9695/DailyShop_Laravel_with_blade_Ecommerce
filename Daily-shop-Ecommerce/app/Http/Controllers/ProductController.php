@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
@@ -9,19 +10,23 @@ use App\Models\Size;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
-
+use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
 
     public function index()
     {
         $catagory = Category::where(['status' => 1])->get();
-
-        return view('Admin/product_create', compact('catagory'));
+$brands=Brand::where(['status'=>1])->get();
+        return view('Admin/product_create', compact('catagory','brands'));
     }
 
     public function create(Request $request)
     {
+        // $data=$request->all();
+        // echo '<pre>';
+        // print_r($data);
+        // die;
         $request->validate([
             'category_id' => 'required',
             'product_name' => 'required',
@@ -46,6 +51,15 @@ class ProductController extends Controller
         $product->technical_specification = $request->post('technical_specification');
         $product->uses = $request->post('uses');
         $product->warrenty = $request->post('warrenty');
+        
+        $product->lead_time = $request->post('lead_time');
+        $product->tax = $request->post('tax');
+        $product->tax_type = $request->post('tax_type');
+        $product->is_promo = $request->post('is_promo');
+        $product->is_featured = $request->post('is_featured');
+        $product->is_discount = $request->post('is_discount');
+        $product->is_tranding = $request->post('is_tranding');
+
         $product->status = '1';
 
         if ($request->hasFile('image')) {
@@ -71,7 +85,15 @@ class ProductController extends Controller
     }
     public function product_delete(Request $request, $id)
     {
+
         $product = Product::find($id);
+        $arrImage=DB::table('products')->where(['id'=>$id])->get();
+        // echo '<pre>';
+        // print_r($arrImage[0]->image);
+        // die;
+         Storage::delete('app/public/admin_assets/product_image'.$arrImage[0]->image);
+//        dd($image_path);
+// die;
         $product->delete();
         $request->session()->flash('message', 'Product Deleted SuccessFully..');
         return redirect()->back();

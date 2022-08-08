@@ -5,6 +5,8 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\CoustomerController;
+use App\Http\Controllers\Front\FrontController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SizeController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +22,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// FONTEND CONTROLLERS  
+Route::get('/',[FrontController::class,'index']);
+// BACKEND CONTROLLERS 
 Route::get('admin', [AdminController::class, 'index']);
 Route::post('admin/auth', [AdminController::class, 'auth'])->name('admin.auth');
 Route::group(['middleware' => 'admin_auth'], function () {
@@ -91,5 +96,13 @@ Route::group(['middleware' => 'admin_auth'], function () {
         Route::post('admin/product/brand/manage_process',[BrandController::class,'manage_brands_process']);
         Route::get('admin/product/brand/delete/{id}',[BrandController::class,'delete_brand']);
         Route::get('admin/product/brand/status/{status}/{id}', [BrandController::class, 'status']);
+
+
+        //MANAGE COUSTOMER'S FROM HERE.........
+
+        Route::get('admin/coustomer/list',[CoustomerController::class,'index']);
+        Route::get('admin/coustomer/status/{status}/{id}', [CoustomerController::class, 'status']);
+
+        Route::get('admin/coustomer/single/{id}',[CoustomerController::class,'single_coustomer']);
 
 });

@@ -28,6 +28,7 @@
                         <th>ID</th>
                         <th>Category Name</th>
                         <th>Category Slug</th>
+                        <th>Category Image</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -37,7 +38,7 @@
                         <td>{{$list->id}}</td>
                         <td>{{$list->category_name}}</td>
                         <td>{{$list->category_slug}}</td>
-
+                        <td> <img src="{{ asset('admin_assets/category_image/'.$list->category_image)}}" alt="No Image Found" style="height: 100px; width:100px;" ></td>
                         <td>
                             <a href="category/delete/{{$list->id}}"><button type="button" class="btn btn-danger">Delete</button></a>
                             <a href="{{url('admin/category/edit')}}/{{$list->id}}"><button type="button" class="btn btn-success">Edit</button></a>

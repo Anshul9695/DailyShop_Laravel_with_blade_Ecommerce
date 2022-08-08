@@ -25,7 +25,11 @@ class CategoryController extends Controller
      */
     public function create_category()
     {
-        return view('Admin/category_create');
+        $categorys=Category::where(['status'=>1])->get();
+        // echo '<pre>';
+        // print_r($categorys);
+        // die;
+        return view('Admin/category_create',compact('categorys'));
     }
 
     /**
@@ -44,6 +48,14 @@ class CategoryController extends Controller
         $category->category_name = $request->post('category_name');
         $category->category_slug = $request->post('category_slug');
         $category->status = '0';
+        $category->parent_category_id = $request->post('parent_category_id');
+        if($request->hasFile('category_image')){
+            $file = $request->file('category_image');
+            $extention = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extention;
+            $file->move(public_path('admin_assets/category_image'), $filename);
+            $category->category_image = $filename;
+        }
         $category->save();
         $request->session()->flash('message', 'category inserted successfully');
         return redirect()->back();

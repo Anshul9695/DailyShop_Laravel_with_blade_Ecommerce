@@ -1,0 +1,52 @@
+.description{
+	overflow: scroll;
+		height:400px;
+}
+.menu-wrapper .main-menu>ul.menu>li.menu-item>a>.menu-label {
+    font-size: 16px;
+    font-weight: bolder;
+}
+.has-icon:hover {
+  transform: scale(1.1); 
+}
+.policy-ul-list li{
+	font-size:18px;
+	color:black;
+}
+
+.wpb_wrapper h1{
+	text-align:center;
+	text-decoration:underline;
+}
+p{
+	color:black;
+	font-size:18px
+}
+.list-text{
+	margin-top:20px;
+}
+.list-text li{
+	list-style:none;
+/* 	display:block; */
+	display:block;
+	color:black;
+	font-size:18px;
+	font-style:italic;
+}
+.list-text li strong{
+	font-size:20px;
+	display:block;
+	color: rgba(16,49,120,1);
+}
+
+/* Home Page design  */
+.products .product h3, .woocommerce .products .product h3 a{
+font-weight:bold;
+}
+.products .product .meta-wrapper p{
+	color:black;
+}
+.ts-feature-wrapper.vertical-icon .feature-header .feature-title, .ts-feature-wrapper.vertical-image .feature-header .feature-title, .ts-feature-wrapper .feature-subtitle {
+color:#00008B;
+	font-weight:bold;
+}
