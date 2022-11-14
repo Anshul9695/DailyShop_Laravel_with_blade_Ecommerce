@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColorController;
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 
 // FONTEND CONTROLLERS  
 Route::get('/',[FrontController::class,'index']);
+
 // BACKEND CONTROLLERS 
 Route::get('admin', [AdminController::class, 'index']);
 Route::post('admin/auth', [AdminController::class, 'auth'])->name('admin.auth');
@@ -97,7 +99,9 @@ Route::group(['middleware' => 'admin_auth'], function () {
         Route::get('admin/product/brand/delete/{id}',[BrandController::class,'delete_brand']);
         Route::get('admin/product/brand/status/{status}/{id}', [BrandController::class, 'status']);
 
-
+//CREATE BLOG POST 
+Route::get('admin/blog_post/create',[BlogPostController::class,'index']);
+Route::post('admin/blog/create',[BlogPostController::class,'create'])->name('create_blog_post');
         //MANAGE COUSTOMER'S FROM HERE.........
 
         Route::get('admin/coustomer/list',[CoustomerController::class,'index']);

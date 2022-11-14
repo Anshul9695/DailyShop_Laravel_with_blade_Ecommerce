@@ -160,6 +160,19 @@
                             </ul>
                         </li>
 
+                        <li class="@yield('select_blog')">
+                            <a class="js-arrow" href="#">
+                                <i class="fa-product-hunt"></i>Blog Post Manger</a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list">
+                                <li class="@yield('create_blog')">
+                                    <a href="{{url('admin/blog_post/create')}}">Create post</a>
+                                </li>
+                                <li class="@yield('blog_list')">
+                                    <a href="{{url('admin/blog_post/list')}}">post List</a>
+                                </li>
+                            </ul>
+                        </li>
+
                         <li class="@yield('select_coustomer')">
                             <a class="js-arrow" href="#">
                                 <i class="fa-product-hunt"></i>Users Manger</a>
