@@ -34,7 +34,7 @@
                         <input id="cc-pament" name="name" value="{{$name}}" type="text" class="form-control" aria-required="true" aria-invalid="false" required>
                     </div>
                     <div class="alert alert-danger" role="alert">
-                        @error('color')
+                        @error('name')
                         {{$message}}
                         @enderror
                     </div>
@@ -44,7 +44,7 @@
                         <label for="cc-payment" class="control-label mb-1">BRAND IMAGE</label>
                         <input type="file" id="img" name="image" class="form-control col-md-7 col-xs-12">
                        
-                        <img src="{{ asset('admin_assets/product_image/'.$image)}}"  style="height:100px;width:100px;" >
+                        <img src="{{ asset('admin_assets/brands_image/'.$image)}}"  style="height:100px;width:100px;" >
                     </div>
 
                     <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">

@@ -2,9 +2,9 @@
 @section('page_title','brand list')
 @section('brand_list','active')
 @section('container')
-<h1>Color List</h1>
+<h1>Brand List</h1>
 <a href="{{url('admin/product/brand/create')}}">
-    <button type="button" class="btn btn-success">Create New Color</button>
+    <button type="button" class="btn btn-success">Create New Brand</button>
 </a>
 <div class="row m-t-30">
     <!-- <div class="alert alert-danger" role="alert">
@@ -37,7 +37,16 @@
                     <tr>
                         <td>{{$list->id}}</td>
                         <td>{{$list->name}}</td>
-                        <td>{{$list->image}}</td>
+<!-- <td>
+    {{$list->image}}
+</td> -->
+                        <td>
+                            {{$list->image}}
+                        @if($list->image!='')
+                                <img width="100px" src="{{asset('storage/public/media/brand/'.$list->image)}}"/>
+                            @endif
+                            </td>
+                            
                         <td>
                             <a href="{{url('admin/product/brand/delete')}}/{{$list->id}}"><button type="button" class="btn btn-danger">Delete</button></a>
                             <a href="{{url('admin/product/brand/create')}}/{{$list->id}}"><button type="button" class="btn btn-success">Edit</button></a>
