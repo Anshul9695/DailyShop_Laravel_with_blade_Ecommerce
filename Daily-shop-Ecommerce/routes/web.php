@@ -8,8 +8,10 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\CoustomerController;
 use App\Http\Controllers\Front\FrontController;
+use App\Http\Controllers\HomeBannerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SizeController;
+use App\Models\HomeBanner;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -98,6 +100,15 @@ Route::group(['middleware' => 'admin_auth'], function () {
         Route::post('admin/product/brand/manage_process',[BrandController::class,'manage_brands_process']);
         Route::get('admin/product/brand/delete/{id}',[BrandController::class,'delete_brand']);
         Route::get('admin/product/brand/status/{status}/{id}', [BrandController::class, 'status']);
+
+        // HOME BANNER 
+        Route::get('admin/banner/list',[HomeBannerController::class,'index']); // show the list of banner is list page 
+        Route::get('admin/banner/create',[HomeBannerController::class,'manage_banners']);// for create the new banner
+        Route::get('admin/banner/create/{id}',[HomeBannerController::class,'manage_banners']);// get details by id in create banner page
+        Route::post('admin/banner/manage_process',[HomeBannerController::class,'manage_banner_process']);// is exist banner then update it other wise create new
+        Route::get('admin/banner/delete/{id}',[HomeBannerController::class,'delete_banner']);// for delete the exist banner from list
+        Route::get('admin/banner/status/{status}/{id}', [HomeBannerController::class, 'status']);
+
 
 //CREATE BLOG POST 
 Route::get('admin/blog_post/create',[BlogPostController::class,'index']);
