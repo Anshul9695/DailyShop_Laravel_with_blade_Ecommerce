@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 class FrontController extends Controller
 {
     public function index(){
+        // getData();
+        // die;
         $posts = DB::table('blog_posts')->limit(3)->get();
 
         $mans_products=DB::table('products')->where('category_id','=',1)->get();
