@@ -47,7 +47,7 @@ class CategoryController extends Controller
         $category = new Category;
         $category->category_name = $request->post('category_name');
         $category->category_slug = $request->post('category_slug');
-        $category->status = '0';
+        $category->status = '1';
         $category->parent_category_id = $request->post('parent_category_id');
         if($request->hasFile('category_image')){
             $file = $request->file('category_image');

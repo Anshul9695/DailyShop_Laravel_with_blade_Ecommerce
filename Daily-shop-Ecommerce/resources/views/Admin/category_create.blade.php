@@ -44,7 +44,7 @@
                     <div class="form-group">
                         <label for="cc-payment" class="control-label mb-1">Select parent Category </label>
                         <select class="form-control " name="parent_category_id">
-                            <option value="">Select catogery</option>
+                            <option value="0">Select catogery</option>
                             @foreach($categorys as $category)
                             <option value="{{$category->id}}">{{$category->category_name}}</option>
                             @endforeach
