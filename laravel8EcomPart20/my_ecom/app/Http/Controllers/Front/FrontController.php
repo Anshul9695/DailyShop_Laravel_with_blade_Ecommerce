@@ -95,4 +95,40 @@ class FrontController extends Controller
 
         return view('front.index',$result);
     }
+
+    public function product(Request $request,$slug){
+        $result['product']=
+        DB::table('products')
+        ->where(['status'=>1])
+        ->where(['slug'=>$slug])
+        ->get();
+
+    foreach($result['product'] as $list1){
+        $result['product_attr'][$list1->id]=
+            DB::table('products_attr')
+            ->leftJoin('sizes','sizes.id','=','products_attr.size_id')
+            ->leftJoin('colors','colors.id','=','products_attr.color_id')
+            ->where(['products_attr.products_id'=>$list1->id])
+            ->get();
+        
+    }
+
+    $result['releted_products']=
+    DB::table('products')
+    ->where(['status'=>1])
+    ->where('slug','!=',$slug)
+    ->where(['category_id'=>$result['product'][0]->category_id])
+    ->get();
+    foreach($result['releted_products'] as $list1){
+        $result['releted_products_attr'][$list1->id]=
+            DB::table('products_attr')
+            ->leftJoin('sizes','sizes.id','=','products_attr.size_id')
+            ->leftJoin('colors','colors.id','=','products_attr.color_id')
+            ->where(['products_attr.products_id'=>$list1->id])
+            ->get();
+        
+    }
+    //  prx($result);
+       return view('front.product',$result);
+    }
 }
