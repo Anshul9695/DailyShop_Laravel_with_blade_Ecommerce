@@ -1,5 +1,5 @@
 @extends('front/layout')
-
+@section('page_title',$product[0]->name)
 @section('container')
   <!-- product category -->
   <section id="aa-product-details">
@@ -17,15 +17,13 @@
                         <div class="simpleLens-big-image-container"><a data-lens-image="{{asset('storage/media/'.$product[0]->image)}}" class="simpleLens-lens-image"><img src="{{asset('storage/media/'.$product[0]->image)}}" class="simpleLens-big-image"></a></div>
                       </div>
                       <div class="simpleLens-thumbnails-container">
-                          <a data-big-image="{{asset('storage/media/'.$product[0]->image)}}" data-lens-image="{{asset('storage/media/'.$product[0]->image)}}" class="simpleLens-thumbnail-wrapper" href="#">
-                            <img src="{{asset('storage/media/'.$product[0]->image)}}" width="50px">
-                          </a>                                    
-                          <!-- <a data-big-image="img/view-slider/medium/polo-shirt-3.png" data-lens-image="img/view-slider/large/polo-shirt-3.png" class="simpleLens-thumbnail-wrapper" href="#">
-                            <img src="{{asset('storage/media/'.$product[0]->image)}}">
-                          </a>
-                          <a data-big-image="img/view-slider/medium/polo-shirt-4.png" data-lens-image="img/view-slider/large/polo-shirt-4.png" class="simpleLens-thumbnail-wrapper" href="#">
-                            <img src="{{asset('storage/media/'.$product[0]->image)}}">
-                          </a> -->
+                        @if(isset($product_images[$product[0]->id][0]))
+                     @foreach($product_images[$product[0]->id] as $list)
+                          <a data-big-image="{{asset('storage/media/'.$list->images)}}" data-lens-image="{{asset('storage/media/'.$list->images)}}" class="simpleLens-thumbnail-wrapper" href="#">
+                            <img src="{{asset('storage/media/'.$list->images)}}" width="50px">
+                          </a>    
+                          @endforeach                                
+                       @endif
                       </div>
                     </div>
                   </div>
@@ -61,7 +59,7 @@
                     <div class="aa-color-tag">
                         @foreach($product_attr[$product[0]->id] as $color)
                            @if($color->color!='')
-                      <a href="#" class="aa-color-{{strtolower($color->color)}}"></a>
+                      <a href="javascript:void(0)" class="aa-color-{{strtolower($color->color)}}" onclick=change_product_color_image("{{asset('storage/media/'.$color->attr_image)}}")></a>
                       @endif
                            @endforeach            
                     </div>

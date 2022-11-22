@@ -112,6 +112,13 @@ class FrontController extends Controller
             ->get();
         
     }
+    foreach($result['product'] as $list1){
+        $result['product_images'][$list1->id]=
+            DB::table('product_images')
+            ->where(['product_images.products_id'=>$list1->id])
+            ->get();
+        
+    }
 
     $result['releted_products']=
     DB::table('products')
@@ -128,7 +135,7 @@ class FrontController extends Controller
             ->get();
         
     }
-    //  prx($result);
+    // prx($result);
        return view('front.product',$result);
     }
 }

@@ -1894,6 +1894,18 @@ img {
 #aa-product-category .aa-sidebar .aa-sidebar-widget .aa-color-tag .aa-color-black {
   background-color: #000;
 }
+.aa-color-red {
+  background-color: rgb(219, 16, 16);
+}
+.aa-color-green {
+  background-color: green;
+}
+.aa-color-blue {
+  background-color: blue;
+}
+.aa-color-white{
+  background-color: white;
+}
 #aa-product-category .aa-sidebar .aa-sidebar-widget .aa-color-tag .aa-color-white {
   background-color: #FFF;
   border: 1px solid #ccc;

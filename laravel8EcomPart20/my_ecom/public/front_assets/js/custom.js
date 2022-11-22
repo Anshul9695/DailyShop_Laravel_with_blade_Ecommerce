@@ -356,4 +356,7 @@ jQuery(function($){
     }); 
     
 });
+function change_product_color_image(img){
+  jQuery(".simpleLens-big-image-container").html('<a data-lens-image="'+img+'" class="simpleLens-lens-image"><img src="'+img+'" class="simpleLens-big-image"></a>');
+}
 

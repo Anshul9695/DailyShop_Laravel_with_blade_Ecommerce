@@ -1,5 +1,5 @@
 @extends('front/layout')
-
+@section('page_title','Home Page')
 @section('container')
 
 <section id="aa-slider">
