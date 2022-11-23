@@ -378,6 +378,15 @@ jQuery("#add_to_cart_msg").html('<div class="alert alert-danger fade in alert-di
   }else if(color_id==''){
     jQuery("#add_to_cart_msg").html('<div class="alert alert-danger fade in alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><strong>Error!   </strong>Please Select The Color</div>');
 }else{
-  alert("thanks");
+  jQuery("#product_id").val(id);
+  jQuery("#pqty").val(jQuery("#qty").val());
+jQuery.ajax({
+  url:'/add_to_cart',
+  data:jQuery("#frmAddToCart").serialize(),
+  type:"post",
+  success:function(result){
+ alert("Product"+result.msg);
+  }
+});
 }
 }

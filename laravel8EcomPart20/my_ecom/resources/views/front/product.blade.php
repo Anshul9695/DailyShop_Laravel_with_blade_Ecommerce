@@ -71,13 +71,10 @@
                     </div>
                     <div class="aa-prod-quantity">
                       <form action="">
-                        <select id="" name="">
-                          <option selected="1" value="0">1</option>
-                          <option value="1">2</option>
-                          <option value="2">3</option>
-                          <option value="3">4</option>
-                          <option value="4">5</option>
-                          <option value="5">6</option>
+                        <select id="qty" name="qty">
+                         @for($i=1;$i<11;$i++)
+                         <option value="{{$i}}">{{$i}}</option>
+                         @endfor
                         </select>
                       </form>
                       <p class="aa-prod-category">
@@ -322,8 +319,14 @@
       </div>
     </div>
   </section>
+  <form id="frmAddToCart">
+  <input type="hidden" id="size_id" name="size_id">
+  <input type="hidden" id="color_id" name="color_id">
+  <input type="hidden" id="pqty" name="pqty">
+  <input type="hidden" id="product_id" name="product_id">
+@csrf
+  </form>
 
-  <input type="hidden" id="size_id">
-  <input type="hidden" id="color_id">
+  
   <!-- / product category -->
 @endsection
