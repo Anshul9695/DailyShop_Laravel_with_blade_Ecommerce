@@ -356,7 +356,28 @@ jQuery(function($){
     }); 
     
 });
-function change_product_color_image(img){
+function change_product_color_image(img,color){
+  jQuery("#color_id").val(color);
   jQuery(".simpleLens-big-image-container").html('<a data-lens-image="'+img+'" class="simpleLens-lens-image"><img src="'+img+'" class="simpleLens-big-image"></a>');
 }
 
+function showColor(size){
+  jQuery("#size_id").val(size);
+  jQuery(".product_color").hide();
+  jQuery(".size_"+size).show();
+  jQuery(".size_link").css('border','1px solid #ddd');
+  jQuery("#size_"+size).css('border','1px solid black');
+}
+
+function add_to_cart(id){
+  jQuery("#add_to_cart_msg").html("");
+  var size_id=jQuery("#size_id").val();
+  var color_id=jQuery("#color_id").val();
+  if(size_id==''){
+jQuery("#add_to_cart_msg").html('<div class="alert alert-danger fade in alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><strong>Error!   </strong>Please Select The Size</div>');
+  }else if(color_id==''){
+    jQuery("#add_to_cart_msg").html('<div class="alert alert-danger fade in alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><strong>Error!   </strong>Please Select The Color</div>');
+}else{
+  alert("thanks");
+}
+}

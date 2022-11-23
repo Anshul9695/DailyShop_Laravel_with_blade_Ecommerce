@@ -48,10 +48,16 @@
                     <p>{!! $product[0]->short_desc !!}</p>
                     <h4>Size</h4>
                     <div class="aa-prod-view-size">
-                    
-                      @foreach($product_attr[$product[0]->id] as $size)
-                           @if($size->size!='')
-                           <a href="#">{{$size->size}}</a>
+                    @php 
+                    $arrSize=[];
+                    foreach($product_attr[$product[0]->id] as $size){
+                     $arrSize[]=$size->size;
+                    }
+                    $arrSize=array_unique($arrSize);
+                    @endphp
+                      @foreach($arrSize as $size)
+                           @if($size!='')
+                           <a href="javascript:void(0)" onclick="showColor('{{$size}}')" class="size_link" id="size_{{$size}}">{{$size}}</a>
                       @endif
                            @endforeach   
                     </div>
@@ -59,7 +65,7 @@
                     <div class="aa-color-tag">
                         @foreach($product_attr[$product[0]->id] as $color)
                            @if($color->color!='')
-                      <a href="javascript:void(0)" class="aa-color-{{strtolower($color->color)}}" onclick=change_product_color_image("{{asset('storage/media/'.$color->attr_image)}}")></a>
+                      <a href="javascript:void(0)" class="aa-color-{{strtolower($color->color)}} product_color size_{{$color->size}}" onclick=change_product_color_image("{{asset('storage/media/'.$color->attr_image)}}","{{$color->color}}")></a>
                       @endif
                            @endforeach            
                     </div>
@@ -83,7 +89,8 @@
     
                     </div>
                     <div class="aa-prod-view-bottom">
-                      <a class="aa-add-to-cart-btn" href="#">Add To Cart</a>
+                      <a class="aa-add-to-cart-btn" href="javascript:void(0)" onclick="add_to_cart('{{$product[0]->id}}')">Add To Cart</a>
+                      <div id="add_to_cart_msg"></div>
                       <a class="aa-add-to-cart-btn" href="#">Wishlist</a>
                       <a class="aa-add-to-cart-btn" href="#">Compare</a>
                     </div>
@@ -315,5 +322,8 @@
       </div>
     </div>
   </section>
+
+  <input type="hidden" id="size_id">
+  <input type="hidden" id="color_id">
   <!-- / product category -->
 @endsection
