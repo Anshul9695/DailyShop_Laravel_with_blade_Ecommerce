@@ -46,6 +46,7 @@
                       <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
                     </div>
                     <p>{!! $product[0]->short_desc !!}</p>
+                    @if($product_attr[$product[0]->id][0]->color_id>0)
                     <h4>Size</h4>
                     <div class="aa-prod-view-size">
                     @php 
@@ -61,6 +62,8 @@
                       @endif
                            @endforeach   
                     </div>
+                    @endif
+                    @if($product_attr[$product[0]->id][0]->color_id>0)
                     <h4>Color</h4>
                     <div class="aa-color-tag">
                         @foreach($product_attr[$product[0]->id] as $color)
@@ -69,6 +72,7 @@
                       @endif
                            @endforeach            
                     </div>
+                    @endif
                     <div class="aa-prod-quantity">
                       <form action="">
                         <select id="qty" name="qty">
@@ -86,7 +90,7 @@
     
                     </div>
                     <div class="aa-prod-view-bottom">
-                      <a class="aa-add-to-cart-btn" href="javascript:void(0)" onclick="add_to_cart('{{$product[0]->id}}')">Add To Cart</a>
+                      <a class="aa-add-to-cart-btn" href="javascript:void(0)" onclick="add_to_cart('{{$product[0]->id}}','{{$product_attr[$product[0]->id][0]->size_id}}','{{$product_attr[$product[0]->id][0]->color_id}}')">Add To Cart</a>
                       <div id="add_to_cart_msg"></div>
                       <a class="aa-add-to-cart-btn" href="#">Wishlist</a>
                       <a class="aa-add-to-cart-btn" href="#">Compare</a>

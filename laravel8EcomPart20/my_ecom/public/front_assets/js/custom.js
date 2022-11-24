@@ -369,13 +369,17 @@ function showColor(size){
   jQuery("#size_"+size).css('border','1px solid black');
 }
 
-function add_to_cart(id){
+function add_to_cart(id,size_str_id,color_str_id){
   jQuery("#add_to_cart_msg").html("");
   var size_id=jQuery("#size_id").val();
   var color_id=jQuery("#color_id").val();
-  if(size_id==''){
+  if(size_str_id==0 && color_str_id==0){
+    size_id='no';
+    color_id='no';
+  }
+  if(size_id=='' && size_id!='no'){
 jQuery("#add_to_cart_msg").html('<div class="alert alert-danger fade in alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><strong>Error!   </strong>Please Select The Size</div>');
-  }else if(color_id==''){
+  }else if(color_id=='' && color_id!='no'){
     jQuery("#add_to_cart_msg").html('<div class="alert alert-danger fade in alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><strong>Error!   </strong>Please Select The Color</div>');
 }else{
   jQuery("#product_id").val(id);
