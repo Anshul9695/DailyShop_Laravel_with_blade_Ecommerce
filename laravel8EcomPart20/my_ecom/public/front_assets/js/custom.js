@@ -393,8 +393,26 @@ jQuery.ajax({
   data:jQuery("#frmAddToCart").serialize(),
   type:"post",
   success:function(result){
- alert("Product"+result.msg);
+ alert("Product   "+result.msg);
   }
 });
 }
+}
+function updateCartQty(pid,size,color,attr_id,price){
+  jQuery("#size_id").val(size);
+ jQuery("#color_id").val(color);
+var qty=jQuery("#qty"+attr_id).val();
+// alert(qty);
+ jQuery('#qty').val(qty);
+ add_to_cart(pid,size,color);
+ jQuery("#total_price_"+attr_id).html('Rs'+qty*price);
+}
+
+// delete the cart product data 
+function deleteCartProduct(pid,size,color,attr_id){
+  jQuery("#size_id").val(size);
+ jQuery("#color_id").val(color);
+ jQuery('#qty').val(0);
+ add_to_cart(pid,size,color);
+jQuery("#cart_box_"+attr_id).remove();
 }
