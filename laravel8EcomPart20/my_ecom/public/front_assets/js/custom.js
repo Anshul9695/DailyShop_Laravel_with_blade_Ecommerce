@@ -368,7 +368,11 @@ function showColor(size){
   jQuery(".size_link").css('border','1px solid #ddd');
   jQuery("#size_"+size).css('border','1px solid black');
 }
-
+function home_add_to_cart(id,size_str_id,color_str_id){
+  jQuery("#size_id").val(size_str_id);
+ jQuery("#color_id").val(color_str_id);
+ add_to_cart(id,size_str_id,color_str_id)
+}
 function add_to_cart(id,size_str_id,color_str_id){
   jQuery("#add_to_cart_msg").html("");
   var size_id=jQuery("#size_id").val();
