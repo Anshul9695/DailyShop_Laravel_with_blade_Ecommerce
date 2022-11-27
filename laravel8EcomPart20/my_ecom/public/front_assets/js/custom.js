@@ -434,3 +434,11 @@ function deleteCartProduct(pid, size, color, attr_id) {
   add_to_cart(pid, size, color);
   jQuery("#cart_box_" + attr_id).remove();
 }
+
+//filter by name and data and price --> MAKING FILTER'S
+
+function sort_by(){
+  var sort_by_val=jQuery("#sort_by_val").val();
+jQuery("#sort").val(sort_by_val);
+jQuery("#catagoryFilter").submit();
+}

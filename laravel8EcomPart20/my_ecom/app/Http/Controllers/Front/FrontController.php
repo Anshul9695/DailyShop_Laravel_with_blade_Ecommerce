@@ -170,17 +170,17 @@ class FrontController extends Controller
             ->get();
         if (isset($check[0]->id)) {
             $update_id = $check[0]->id;
-           if($pqty==0){
-            DB::table('cart')
-            ->where(['id' => $update_id])
-            ->delete();
-        $msg = "  Removed";
-           }else{
-            DB::table('cart')
-            ->where(['id' => $update_id])
-            ->update(['qty' => $pqty]);
-        $msg = "Cart Updated";
-           }
+            if ($pqty == 0) {
+                DB::table('cart')
+                    ->where(['id' => $update_id])
+                    ->delete();
+                $msg = "  Removed";
+            } else {
+                DB::table('cart')
+                    ->where(['id' => $update_id])
+                    ->update(['qty' => $pqty]);
+                $msg = "Cart Updated";
+            }
         } else {
             $id = DB::table('cart')->insertGetId([
                 'user_id' => $uid,
@@ -192,16 +192,16 @@ class FrontController extends Controller
             ]);
             $msg = "added";
         }
-        $data= DB::table('cart')
-        ->leftJoin('products', 'products.id', '=', 'cart.product_id')
-        ->leftJoin('products_attr', 'products_attr.id', '=', 'cart.product_attr_id')
-        ->leftJoin('sizes', 'sizes.id', '=', 'products_attr.size_id')
-        ->leftJoin('colors', 'colors.id', '=', 'products_attr.color_id')
-        ->where(['user_id' => $uid])
-        ->where(['user_type' => $user_type])
-        ->select('cart.qty','products.name','products.image','sizes.size','colors.color','products_attr.price','products.slug','products.id as pid','products_attr.id as attr_id')
-        ->get();
-        return response()->json(['msg' => $msg,'rowCount'=>count($data),'data'=>$data]);
+        $data = DB::table('cart')
+            ->leftJoin('products', 'products.id', '=', 'cart.product_id')
+            ->leftJoin('products_attr', 'products_attr.id', '=', 'cart.product_attr_id')
+            ->leftJoin('sizes', 'sizes.id', '=', 'products_attr.size_id')
+            ->leftJoin('colors', 'colors.id', '=', 'products_attr.color_id')
+            ->where(['user_id' => $uid])
+            ->where(['user_type' => $user_type])
+            ->select('cart.qty', 'products.name', 'products.image', 'sizes.size', 'colors.color', 'products_attr.price', 'products.slug', 'products.id as pid', 'products_attr.id as attr_id')
+            ->get();
+        return response()->json(['msg' => $msg, 'rowCount' => count($data), 'data' => $data]);
     }
 
     //front cart details page 
@@ -214,36 +214,65 @@ class FrontController extends Controller
             $uid = getUserTempId();
             $user_type = "Not-Reg";
         }
-        $result['list']= DB::table('cart')
-        ->leftJoin('products', 'products.id', '=', 'cart.product_id')
-        ->leftJoin('products_attr', 'products_attr.id', '=', 'cart.product_attr_id')
-        ->leftJoin('sizes', 'sizes.id', '=', 'products_attr.size_id')
-        ->leftJoin('colors', 'colors.id', '=', 'products_attr.color_id')
-        ->where(['user_id' => $uid])
-        ->where(['user_type' => $user_type])
-        ->select('cart.qty','products.name','products.image','sizes.size','colors.color','products_attr.price','products.slug','products.id as pid','products_attr.id as attr_id')
-        ->get();
+        $result['list'] = DB::table('cart')
+            ->leftJoin('products', 'products.id', '=', 'cart.product_id')
+            ->leftJoin('products_attr', 'products_attr.id', '=', 'cart.product_attr_id')
+            ->leftJoin('sizes', 'sizes.id', '=', 'products_attr.size_id')
+            ->leftJoin('colors', 'colors.id', '=', 'products_attr.color_id')
+            ->where(['user_id' => $uid])
+            ->where(['user_type' => $user_type])
+            ->select('cart.qty', 'products.name', 'products.image', 'sizes.size', 'colors.color', 'products_attr.price', 'products.slug', 'products.id as pid', 'products_attr.id as attr_id')
+            ->get();
         // prx($result);
-       return view('front.cart',$result);
+        return view('front.cart', $result);
     }
     public function catagory(Request $request, $slug)
     {
-        $result['product'] =
-        DB::table('products')
-        ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
-        ->where(['products.status' => 1])
-        ->where(['categories.category_slug' => $slug])
-        ->get();
+        $sort = "";
+        $sort_txt="";
+        if ($request->get('sort') !== null) {
+            $sort = $request->get('sort');
+        }
+        // echo $sort;
 
-    foreach ($result['product'] as $list1) {
-        $result['product_attr'][$list1->id] =
-            DB::table('products_attr')
-            ->leftJoin('sizes', 'sizes.id', '=', 'products_attr.size_id')
-            ->leftJoin('colors', 'colors.id', '=', 'products_attr.color_id')
-            ->where(['products_attr.products_id' => $list1->id])
-            ->get();
-    }
-    // prx($result);
-       return view('front.catagory',$result);
+        $query = DB::table('products');
+        $query = $query->leftJoin('categories', 'categories.id', '=', 'products.category_id');
+        $query = $query->leftJoin('products_attr', 'products_attr.products_id', '=','products.id');
+        $query = $query->where(['products.status' => 1]);
+        $query = $query->where(['categories.category_slug' => $slug]);
+        if ($sort == 'name') {
+            $query = $query->orderBy('products.name', 'desc');
+            $sort_txt="Name";
+        }
+        if ($sort == 'date') {
+            $query = $query->orderBy('products.id', 'desc');
+            $sort_txt="Date";
+        }
+        if ($sort == 'price_desc') {
+            $query = $query->orderBy('products_attr.price', 'desc');
+            $sort_txt="Price Desc";
+        }
+        if ($sort == 'price_asc') {
+            $query = $query->orderBy('products_attr.price', 'asc');
+            $sort_txt="Price Asc";
+        }
+        $query = $query->select("products.*");
+        $query = $query->get();
+     
+        // echo $query;
+        // die;
+        $result['product'] = $query;
+        foreach ($result['product'] as $list1) {
+            $query1 = DB::table('products_attr');
+            $query1 = $query1->leftJoin('sizes', 'sizes.id', '=', 'products_attr.size_id');
+            $query1 = $query1->leftJoin('colors', 'colors.id', '=', 'products_attr.color_id');
+            $query1 = $query1->where(['products_attr.products_id' => $list1->id]);
+            $query1 = $query1->get();
+            $result['product_attr'][$list1->id] = $query1;
+        }
+        // prx($result);
+        $result['sort']=$sort;
+        $result['sort_txt']=$sort_txt;
+        return view('front.catagory', $result);
     }
 }

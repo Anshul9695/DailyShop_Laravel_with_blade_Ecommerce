@@ -11,13 +11,16 @@
               <div class="aa-product-catg-head-left">
                 <form action="" class="aa-sort-form">
                   <label for="">Sort by</label>
-                  <select name="">
-                    <option value="1" selected="Default">Default</option>
-                    <option value="2">Name</option>
-                    <option value="3">Price</option>
-                    <option value="4">Date</option>
+                  <select name="" onchange="sort_by()" id="sort_by_val">
+                    <option value="" selected="Default">Default</option>
+                    <option value="name">Name</option>
+                    <option value="price_desc">Price - Desc</option>
+                    <option value="price_asc">Price Asc</option>
+                    <option value="date">Date</option>
                   </select>
+                  {{$sort_txt}}
                 </form>
+            
                 <form action="" class="aa-show-form">
                   <label for="">Show</label>
                   <select name="">
@@ -211,6 +214,11 @@
 @csrf
   </form>
 
+
+  <form id="catagoryFilter">
+  <input type="hidden" id="sort" name="sort" value="{{$sort_txt}}">
+
+  </form>
   
   <!-- / product category -->
 @endsection
