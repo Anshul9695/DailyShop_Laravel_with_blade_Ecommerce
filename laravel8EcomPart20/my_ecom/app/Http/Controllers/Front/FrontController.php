@@ -256,6 +256,13 @@ class FrontController extends Controller
             $query = $query->orderBy('products_attr.price', 'asc');
             $sort_txt="Price Asc";
         }
+        if($request->get('filter_price_start')!==null && $request->get('filter_price_end')!==null){
+            $filter_price_start=$request->get('filter_price_start');
+            $filter_price_end=$request->get('filter_price_end');
+            if($filter_price_start>0 && $filter_price_end>0){
+                $query=$query->whereBetween('products_attr.price',[$filter_price_start,$filter_price_end]);
+            }
+        }
         $query = $query->select("products.*");
         $query = $query->get();
      
@@ -273,6 +280,8 @@ class FrontController extends Controller
         // prx($result);
         $result['sort']=$sort;
         $result['sort_txt']=$sort_txt;
+        $result['filter_price_start']=$filter_price_start;
+        $result['filter_price_end']=$filter_price_end;
         return view('front.catagory', $result);
     }
 }
