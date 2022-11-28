@@ -466,3 +466,9 @@ function setColor(color,type){
   }
   jQuery("#catagoryFilter").submit();
 }
+function funSearch(){
+  var search_txt=jQuery("#search_str").val();
+  if(search_txt!=''){
+    window.location.href='/search/'+search_txt;
+  }
+}
