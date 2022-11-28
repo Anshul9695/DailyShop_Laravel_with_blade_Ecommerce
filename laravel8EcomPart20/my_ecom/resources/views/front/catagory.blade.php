@@ -155,11 +155,13 @@
             <div class="aa-sidebar-widget">
               <h3>Category</h3>
               <ul class="aa-catg-nav">
-                <li><a href="#">Men</a></li>
-                <li><a href="">Women</a></li>
-                <li><a href="">Kids</a></li>
-                <li><a href="">Electornics</a></li>
-                <li><a href="">Sports</a></li>
+                @foreach($left_catagory as $catagory)
+                @if($slug==$catagory->category_slug)
+                <li><a href="{{url('catagory/'.$catagory->category_slug)}}" class="active_lift_catagory">{{$catagory->category_name}}</a></li>
+           @else  
+           <li><a href="{{url('catagory/'.$catagory->category_slug)}}">{{$catagory->category_name}}</a></li>
+           @endif
+                @endforeach
               </ul>
             </div>
          

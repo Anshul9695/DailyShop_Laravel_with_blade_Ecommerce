@@ -294,12 +294,17 @@ class FrontController extends Controller
             ->get();
         //prx($result);
         $result['sort'] = $sort;
+        $result['slug'] = $slug;
         $result['sort_txt'] = $sort_txt;
         $result['filter_price_start'] = $filter_price_start;
         $result['filter_price_end'] = $filter_price_end;
         $result['color_filter'] = $color_filter;
         $result['colorFilterArr'] = $colorFilterArr;
-     
+
+        $result['left_catagory'] = DB::table('categories')
+        ->where(['status' => 1])
+        ->get();
+   
         return view('front.catagory', $result);
     }
 }
