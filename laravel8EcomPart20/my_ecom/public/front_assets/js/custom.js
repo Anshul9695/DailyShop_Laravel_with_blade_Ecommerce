@@ -455,3 +455,14 @@ jQuery("#filter_price_start").val(start);
 jQuery("#filter_price_end").val(end);
 jQuery("#catagoryFilter").submit();
 }
+function setColor(color,type){
+  var color_str=jQuery("#color_filter").val();
+  if(type==1){
+    var new_str_color=color_str.replace(color+':','');
+    jQuery("#color_filter").val(new_str_color);
+  }else{
+    jQuery("#color_filter").val(color+':'+color_str);
+  jQuery("#catagoryFilter").submit();
+  }
+  jQuery("#catagoryFilter").submit();
+}
