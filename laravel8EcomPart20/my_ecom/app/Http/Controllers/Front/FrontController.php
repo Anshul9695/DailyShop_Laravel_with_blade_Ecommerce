@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class FrontController extends Controller
 {
@@ -232,8 +234,8 @@ class FrontController extends Controller
         $sort_txt = "";
         $filter_price_start = "";
         $filter_price_end = "";
-        $color_filter="";
-        $colorFilterArr=[];
+        $color_filter = "";
+        $colorFilterArr = [];
         if ($request->get('sort') !== null) {
             $sort = $request->get('sort');
         }
@@ -267,13 +269,13 @@ class FrontController extends Controller
                 $query = $query->whereBetween('products_attr.price', [$filter_price_start, $filter_price_end]);
             }
         }
-      
+
         if ($request->get('color_filter') !== null) {
             $color_filter = $request->get('color_filter');
-            $colorFilterArr=explode(':',$color_filter);
-            $colorFilterArr=array_filter($colorFilterArr);
-                $query = $query->where(['products_attr.color_id'=> $request->get($color_filter)]);
-                $color_filter=$request->get('color_filter'); 
+            $colorFilterArr = explode(':', $color_filter);
+            $colorFilterArr = array_filter($colorFilterArr);
+            $query = $query->where(['products_attr.color_id' => $request->get($color_filter)]);
+            $color_filter = $request->get('color_filter');
         }
         $query = $query->select("products.*");
         $query = $query->get();
@@ -302,39 +304,68 @@ class FrontController extends Controller
         $result['colorFilterArr'] = $colorFilterArr;
 
         $result['left_catagory'] = DB::table('categories')
-        ->where(['status' => 1])
-        ->get();
-   
+            ->where(['status' => 1])
+            ->get();
+
         return view('front.catagory', $result);
     }
-//SEARCH PRODUCT by name keywords and othe product fields 
+    //SEARCH PRODUCT by name keywords and othe product fields 
     public function search(Request $request, $str)
     {
         $result['product'] = $query = DB::table('products');
-            $query = $query->leftJoin('categories', 'categories.id', '=', 'products.category_id');
-            $query = $query->leftJoin('products_attr', 'products_attr.products_id', '=', 'products.id');
-            $query = $query->where(['products.status' => 1]);
-            $query=$query->where('name','like',"%$str%");
-            $query=$query->orwhere('model','like',"%$str%");
-            $query=$query->orwhere('short_desc','like',"%$str%");
-            $query=$query->orwhere('desc','like',"%$str%");
-            $query=$query->orwhere('keywords','like',"%$str%");
-            $query=$query->orwhere('technical_specification','like',"%$str%");
-            $query=$query->orwhere('warranty','like',"%$str%");
-            $query = $query->distinct()->select("products.*");
-            $query = $query->get();
-            $result['product'] = $query;
-            foreach ($result['product'] as $list1) {
-                $query1 = DB::table('products_attr');
-                $query1 = $query1->leftJoin('sizes', 'sizes.id', '=', 'products_attr.size_id');
-                $query1 = $query1->leftJoin('colors', 'colors.id', '=', 'products_attr.color_id');
-                $query1 = $query1->where(['products_attr.products_id' => $list1->id]);
-                $query1 = $query1->get();
-                $result['product_attr'][$list1->id] = $query1;
-            }
+        $query = $query->leftJoin('categories', 'categories.id', '=', 'products.category_id');
+        $query = $query->leftJoin('products_attr', 'products_attr.products_id', '=', 'products.id');
+        $query = $query->where(['products.status' => 1]);
+        $query = $query->where('name', 'like', "%$str%");
+        $query = $query->orwhere('model', 'like', "%$str%");
+        $query = $query->orwhere('short_desc', 'like', "%$str%");
+        $query = $query->orwhere('desc', 'like', "%$str%");
+        $query = $query->orwhere('keywords', 'like', "%$str%");
+        $query = $query->orwhere('technical_specification', 'like', "%$str%");
+        $query = $query->orwhere('warranty', 'like', "%$str%");
+        $query = $query->distinct()->select("products.*");
+        $query = $query->get();
+        $result['product'] = $query;
+        foreach ($result['product'] as $list1) {
+            $query1 = DB::table('products_attr');
+            $query1 = $query1->leftJoin('sizes', 'sizes.id', '=', 'products_attr.size_id');
+            $query1 = $query1->leftJoin('colors', 'colors.id', '=', 'products_attr.color_id');
+            $query1 = $query1->where(['products_attr.products_id' => $list1->id]);
+            $query1 = $query1->get();
+            $result['product_attr'][$list1->id] = $query1;
+        }
         // prx($result);
         return view('front.search', $result);
-  
+    }
+    public function registration(Request $request)
+    {
+        return view('front.registration');
     }
 
+    public function registration_process(Request $request)
+    {
+        $valid = Validator::make($request->all(), [
+            "name" => "required",
+            "email" => "required|email|unique:customers,email",
+            "mobile" => "required",
+            "password" => "required"
+        ]);
+        if ($valid->fails()) {
+            return response()->json(["status" => "errors", "errors" => $valid->errors()->toArray()]);
+        } else {
+            $arr = [
+                "name" => $request->name,
+                "email" => $request->email,
+                "mobile" => $request->mobile,
+                "password" =>Crypt::encrypt($request->password),
+                "status" => 1,
+                "created_at" => date('Y-m-d h:i:s'),
+                "updated_at" => date('Y-m-d h:i:s')
+            ];
+            $query=DB::table('customers')->insert($arr);
+            if($query){
+                return response()->json(["status" => "success","msg"=>"Register SuccessFully"]);
+            }
+        }
+    }
 }
