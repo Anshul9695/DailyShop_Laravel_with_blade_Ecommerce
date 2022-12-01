@@ -339,6 +339,9 @@ class FrontController extends Controller
     }
     public function registration(Request $request)
     {
+        if($request->session()->has('FRONT_USER_LOGIN')!=null){
+            return redirect('/');
+        }
         return view('front.registration');
     }
 
@@ -357,15 +360,39 @@ class FrontController extends Controller
                 "name" => $request->name,
                 "email" => $request->email,
                 "mobile" => $request->mobile,
-                "password" =>Crypt::encrypt($request->password),
+                "password" => Crypt::encrypt($request->password),
                 "status" => 1,
                 "created_at" => date('Y-m-d h:i:s'),
                 "updated_at" => date('Y-m-d h:i:s')
             ];
-            $query=DB::table('customers')->insert($arr);
-            if($query){
-                return response()->json(["status" => "success","msg"=>"Register SuccessFully"]);
+            $query = DB::table('customers')->insert($arr);
+            if ($query) {
+                return response()->json(["status" => "success", "msg" => "Register SuccessFully"]);
             }
         }
+    }
+    public function login_process(Request $request)
+    {
+        $result = DB::table('customers')
+            ->where(['email' => $request->str_login_email])
+            ->get();
+        
+        if (isset($result[0])) {
+            $db_pwd = Crypt::decrypt($result[0]->password);
+            if ($db_pwd == $request->str_login_password) {
+                $request->session()->put("FRONT_USER_LOGIN",true);
+                $request->session()->put("FRONT_USER_ID",$result[0]->id);
+                $request->session()->put("FRONT_USER_NAME",$result[0]->name);
+                $status = 'success';
+                $msg = '';
+            } else {
+                $status = 'errors';
+                $msg = 'Wrong Password Please Try Again !!';
+            }
+        } else {
+            $status = 'errors';
+            $msg = 'Email is Not Valid ';
+        }
+        return response()->json(["status" => $status, "errors" => $msg]);
     }
 }

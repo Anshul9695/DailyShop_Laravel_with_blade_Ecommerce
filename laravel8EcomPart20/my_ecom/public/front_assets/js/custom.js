@@ -498,3 +498,21 @@ jQuery("#frmRegistration").submit(function (e) {
     }
   });
 });
+
+//for user login Ajax 
+jQuery("#frmLogin").submit(function (e) {
+  e.preventDefault();
+  jQuery.ajax({
+    url: '/login_process',
+    data: jQuery("#frmLogin").serialize(),
+    type: 'post',
+    success: function (result) {
+      if (result.status == "errors") {
+       jQuery("#login_msg").html(result.errors);
+       jQuery("#login_msg").css("color","red");
+      }if(result.status == "success"){
+    window.location.href="/";
+      }
+    }
+  });
+});

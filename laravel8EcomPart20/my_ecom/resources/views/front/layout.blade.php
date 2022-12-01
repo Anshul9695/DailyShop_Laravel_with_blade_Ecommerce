@@ -70,7 +70,12 @@
 
                   <li class="hidden-xs"><a href="{{url('/cart')}}">My Cart</a></li>
                   <li class="hidden-xs"><a href="javascript:void(0)">Checkout</a></li>
+                  @if(session()->has('FRONT_USER_LOGIN')!=null)
+                  <li><a href="{{url('/logout')}}">LogOut</a></li>
+                  @else   
                   <li><a href="" data-toggle="modal" data-target="#login-modal">Login</a></li>
+                  @endif
+                  
                 </ul>
               </div>
             </div>
@@ -287,12 +292,14 @@
         <div class="modal-body">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4>Login or Register</h4>
-          <form class="aa-login-form" action="">
-            <label for="">Username or Email address<span>*</span></label>
-            <input type="text" placeholder="Username or email">
+          <div id="login_msg"></div>
+          <form class="aa-login-form" id="frmLogin">
+            @csrf
+            <label for="">Email address<span>*</span></label>
+            <input type="text" placeholder="Username or email" name="str_login_email">
             <label for="">Password<span>*</span></label>
-            <input type="password" placeholder="Password">
-            <button class="aa-browse-btn" type="submit">Login</button>
+            <input type="password" placeholder="Password" name="str_login_password">
+            <button class="aa-browse-btn" type="submit" id="btnLogin">Login</button>
             <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme"> Remember me </label>
             <p class="aa-lost-password"><a href="#">Lost your password?</a></p>
             <div class="aa-register-now">
