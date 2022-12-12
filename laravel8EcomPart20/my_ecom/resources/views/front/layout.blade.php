@@ -284,7 +284,17 @@
     </div>
   </footer>
   <!-- / footer -->
-
+@php   
+if(isset($_COOKIE['login_email']) && isset($_COOKIE['login_pwd'])){
+$login_email=$_COOKIE['login_email'];
+$login_pwd=$_COOKIE['login_pwd'];
+$is_remember="checked='checked'";
+}else{
+$login_email='';
+$login_pwd='';
+$is_remember='';
+}
+@endphp 
   <!-- Login Modal -->
   <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -296,11 +306,11 @@
           <form class="aa-login-form" id="frmLogin">
             @csrf
             <label for="">Email address<span>*</span></label>
-            <input type="text" placeholder="Username or email" name="str_login_email">
+            <input type="text" placeholder="Username or email" name="str_login_email" value="{{$login_email}}">
             <label for="">Password<span>*</span></label>
-            <input type="password" placeholder="Password" name="str_login_password">
+            <input type="password" placeholder="Password" name="str_login_password" value="{{$login_pwd}}">
             <button class="aa-browse-btn" type="submit" id="btnLogin">Login</button>
-            <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme"> Remember me </label>
+            <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme" name="rememberme" {{$is_remember}}> Remember me </label>
             <p class="aa-lost-password"><a href="#">Lost your password?</a></p>
             <div class="aa-register-now">
               Don't have an account?<a href="{{url('/registration')}}">Register now!</a>

@@ -339,7 +339,7 @@ class FrontController extends Controller
     }
     public function registration(Request $request)
     {
-        if($request->session()->has('FRONT_USER_LOGIN')!=null){
+        if ($request->session()->has('FRONT_USER_LOGIN') != null) {
             return redirect('/');
         }
         return view('front.registration');
@@ -373,16 +373,27 @@ class FrontController extends Controller
     }
     public function login_process(Request $request)
     {
+        // prx($_POST);
+
         $result = DB::table('customers')
             ->where(['email' => $request->str_login_email])
             ->get();
-        
+
         if (isset($result[0])) {
             $db_pwd = Crypt::decrypt($result[0]->password);
             if ($db_pwd == $request->str_login_password) {
-                $request->session()->put("FRONT_USER_LOGIN",true);
-                $request->session()->put("FRONT_USER_ID",$result[0]->id);
-                $request->session()->put("FRONT_USER_NAME",$result[0]->name);
+
+                if ($request->rememberme === null) {
+                    setcookie('login_email', $request->str_login_email,365);// cookie unset
+                    setcookie('login_pwd', $request->str_login_password,365);// cookie unset
+                } else {
+              setcookie('login_email', $request->str_login_email,time()+60*60*24*365);// for one year your login email saved in cookie
+              setcookie('login_pwd', $request->str_login_password,time()+60*60*24*365);// for one year your login password will saved via cookie
+                }
+             
+                $request->session()->put("FRONT_USER_LOGIN", true);
+                $request->session()->put("FRONT_USER_ID", $result[0]->id);
+                $request->session()->put("FRONT_USER_NAME", $result[0]->name);
                 $status = 'success';
                 $msg = '';
             } else {
