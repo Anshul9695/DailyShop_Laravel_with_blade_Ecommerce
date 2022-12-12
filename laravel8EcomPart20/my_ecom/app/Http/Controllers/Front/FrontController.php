@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 
 class FrontController extends Controller
 {
@@ -356,18 +357,27 @@ class FrontController extends Controller
         if ($valid->fails()) {
             return response()->json(["status" => "errors", "errors" => $valid->errors()->toArray()]);
         } else {
+            $rand_id = rand(111111111, 999999999);
             $arr = [
                 "name" => $request->name,
                 "email" => $request->email,
                 "mobile" => $request->mobile,
                 "password" => Crypt::encrypt($request->password),
                 "status" => 1,
+                "is_varify" => 0,
+                "rand_id" => $rand_id,
                 "created_at" => date('Y-m-d h:i:s'),
                 "updated_at" => date('Y-m-d h:i:s')
             ];
             $query = DB::table('customers')->insert($arr);
             if ($query) {
-                return response()->json(["status" => "success", "msg" => "Register SuccessFully"]);
+                $data = ['name' => $request->name, 'rand_id' => $rand_id];
+                $user['to'] = $request->email;
+                Mail::send('front/email_verification', $data, function ($messages) use ($user) {
+                    $messages->to($user['to']);
+                    $messages->subject('Email Id Verification');
+                });
+                return response()->json(["status" => "success", "msg" => "Register SuccessFully . please check your Email for Varification of Email"]);
             }
         }
     }
@@ -378,19 +388,25 @@ class FrontController extends Controller
         $result = DB::table('customers')
             ->where(['email' => $request->str_login_email])
             ->get();
-
         if (isset($result[0])) {
             $db_pwd = Crypt::decrypt($result[0]->password);
+            $status = $result[0]->status;
+            $is_varify = $result[0]->is_varify;
+            if ($is_varify == 0) {
+                return response()->json(["status" => "errors", "errors" => "please Verify your Email Id"]);
+            }
+            if ($status == 0) {
+                return response()->json(["status" => "errors", "errors" => "Your Account has Been deactivated"]);
+            }
             if ($db_pwd == $request->str_login_password) {
-
                 if ($request->rememberme === null) {
-                    setcookie('login_email', $request->str_login_email,365);// cookie unset
-                    setcookie('login_pwd', $request->str_login_password,365);// cookie unset
+                    setcookie('login_email', $request->str_login_email, 365); // cookie unset
+                    setcookie('login_pwd', $request->str_login_password, 365); // cookie unset
                 } else {
-              setcookie('login_email', $request->str_login_email,time()+60*60*24*365);// for one year your login email saved in cookie
-              setcookie('login_pwd', $request->str_login_password,time()+60*60*24*365);// for one year your login password will saved via cookie
+                    setcookie('login_email', $request->str_login_email, time() + 60 * 60 * 24 * 365); // for one year your login email saved in cookie
+                    setcookie('login_pwd', $request->str_login_password, time() + 60 * 60 * 24 * 365); // for one year your login password will saved via cookie
                 }
-             
+
                 $request->session()->put("FRONT_USER_LOGIN", true);
                 $request->session()->put("FRONT_USER_ID", $result[0]->id);
                 $request->session()->put("FRONT_USER_NAME", $result[0]->name);
@@ -405,5 +421,20 @@ class FrontController extends Controller
             $msg = 'Email is Not Valid ';
         }
         return response()->json(["status" => $status, "errors" => $msg]);
+    }
+
+    public function email_verification(Request $request, $id)
+    {
+        $result = DB::table('customers')
+            ->where(['rand_id' => $id])
+            ->get();
+        if (isset($result[0])) {
+            DB::table('customers')
+                ->where(['id' => $result[0]->id])
+                ->update(['is_varify' => 1,'rand_id'=>'']);
+            return view('front.after_email_verification');
+        } else {
+            return redirect('/');
+        }
     }
 }
