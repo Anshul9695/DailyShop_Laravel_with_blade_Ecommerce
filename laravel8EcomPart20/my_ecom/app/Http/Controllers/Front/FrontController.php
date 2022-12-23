@@ -211,7 +211,7 @@ class FrontController extends Controller
     public function cart(Request $request)
     {
         if ($request->session()->has('FRONT_USER_LOGIN')) {
-            $uid = $request->session()->get('FRONT_USER_LOGIN');
+            $uid = $request->session()->get('FRONT_USER_ID');
             $user_type = "Reg";
         } else {
             $uid = getUserTempId();
@@ -412,6 +412,10 @@ class FrontController extends Controller
                 $request->session()->put("FRONT_USER_NAME", $result[0]->name);
                 $status = 'success';
                 $msg = '';
+                $getUserTempId=getUserTempId();
+                DB::table('cart')
+                ->where(['user_id' =>$getUserTempId,'user_type'=>'Not-Reg'])
+                ->update(['user_id' =>$result[0]->id,'user_type' => 'Reg']);
             } else {
                 $status = 'errors';
                 $msg = 'Wrong Password Please Try Again !!';
