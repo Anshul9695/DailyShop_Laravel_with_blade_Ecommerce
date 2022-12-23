@@ -427,14 +427,68 @@ class FrontController extends Controller
     {
         $result = DB::table('customers')
             ->where(['rand_id' => $id])
+            ->where(['is_varify' => 0])
             ->get();
         if (isset($result[0])) {
             DB::table('customers')
                 ->where(['id' => $result[0]->id])
-                ->update(['is_varify' => 1,'rand_id'=>'']);
+                ->update(['is_varify' => 1, 'rand_id' => '']);
             return view('front.after_email_verification');
         } else {
             return redirect('/');
         }
+    }
+
+
+    public function forgot_password(Request $request)
+    {
+        $result = DB::table('customers')
+        ->where(['email' => $request->str_forgot_email])
+        ->get();
+        $rand_id = rand(111111111, 999999999);
+    if (isset($result[0])) {
+        DB::table('customers')
+        ->where(['email' => $request->str_forgot_email])
+        ->update(['is_forgot_password' => 1, 'rand_id' => $rand_id]);
+
+        $data = ['name' => $result[0]->name, 'rand_id' => $rand_id];
+                $user['to'] = $request->str_forgot_email;
+                Mail::send('front/forgot_password', $data, function ($messages) use ($user) {
+                    $messages->to($user['to']);
+                    $messages->subject('Forgot Password');
+                });
+                return response()->json(["status" => "errors", "errors" => "Please check your Email"]);
+    }else{
+        return response()->json(["status" => "errors", "errors" => "Email is not Registred please Register First"]);
+    }
+    }
+
+
+    public function forgot_password_change(Request $request, $id)
+    {
+        $result = DB::table('customers')
+            ->where(['rand_id' => $id])
+            ->where(['is_forgot_password' => 1])
+            ->get();
+        if (isset($result[0])) {
+            $request->session()->put("FORGOT_PASSWORD_USER_ID",$result[0]->id);
+            return view('front.forgot_password_change');
+        } else {
+            return redirect('/');
+        }
+    }
+
+    public function change_password_process(Request $request)
+    {
+        //FORGOT_PASSWORD_USER_ID
+
+        DB::table('customers')
+        ->where(['id' => $request->session()->get("FORGOT_PASSWORD_USER_ID")])
+        ->update([
+            'rand_id' => '',
+            'password'=> Crypt::encrypt($request->password),
+            'is_forgot_password' =>0
+        ]);
+        return response()->json(["status" => "success", "errors" => "Password Change"]);
     }
 }

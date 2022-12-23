@@ -299,7 +299,8 @@ $is_remember='';
   <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-body">
+   <div id="popup_register">
+   <div class="modal-body">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4>Login or Register</h4>
           <div id="login_msg"></div>
@@ -311,12 +312,29 @@ $is_remember='';
             <input type="password" placeholder="Password" name="str_login_password" value="{{$login_pwd}}">
             <button class="aa-browse-btn" type="submit" id="btnLogin">Login</button>
             <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme" name="rememberme" {{$is_remember}}> Remember me </label>
-            <p class="aa-lost-password"><a href="#">Lost your password?</a></p>
+            <p class="aa-lost-password"><a href="javascript:void(0)" onclick="forgot_password()">Lost your password?</a></p>
             <div class="aa-register-now">
               Don't have an account?<a href="{{url('/registration')}}">Register now!</a>
             </div>
           </form>
         </div>
+   </div>
+   <div id="popup_forgot" style="display: none;">
+   <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>Forgot Password</h4>
+          <div id="fogot_msg"></div>
+          <form class="aa-login-form" id="frmForgot">
+            @csrf
+            <label for="">Email address<span>*</span></label>
+            <input type="text" placeholder="Username or email" name="str_forgot_email" >
+            <button class="aa-browse-btn" type="submit" id="btnForgot">Submit</button>
+            <div class="aa-register-now">
+             Login Form ?<a href="javascript:void(0)" onclick="show_login_form()">Login</a>
+            </div>
+          </form>
+        </div>
+   </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div>
