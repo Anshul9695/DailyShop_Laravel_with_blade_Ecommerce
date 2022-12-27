@@ -28,6 +28,7 @@ Route::get('/',[FrontController::class,'index']);
 Route::get('product/{id}',[FrontController::class,'product']);
 Route::post('add_to_cart',[FrontController::class,'add_to_cart']);
 Route::get('cart',[FrontController::class,'cart']);
+Route::get('checkout',[FrontController::class,'checkout']);
 Route::get('catagory/{id}',[FrontController::class,'catagory']);
 Route::get('search/{str}',[FrontController::class,'search']);
 Route::get('registration',[FrontController::class,'registration']);

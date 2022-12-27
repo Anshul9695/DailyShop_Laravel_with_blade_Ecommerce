@@ -140,7 +140,7 @@ class FrontController extends Controller
     {
         // prx($_POST)
         if ($request->session()->has('FRONT_USER_LOGIN')) {
-            $uid = $request->session()->get('FRONT_USER_LOGIN');
+            $uid = $request->session()->get('FRONT_USER_ID');
             $user_type = "Reg";
         } else {
             $uid = getUserTempId();
@@ -494,5 +494,40 @@ class FrontController extends Controller
             'is_forgot_password' =>0
         ]);
         return response()->json(["status" => "success", "errors" => "Password Change"]);
+    }
+
+    public function checkout(Request $request){
+        $result['cart_data']=getAddToCartTotalItem();
+// prx($result);
+        if (isset($result['cart_data'][0])) {
+
+            if ($request->session()->has('FRONT_USER_LOGIN')) {
+                $uid = $request->session()->get('FRONT_USER_ID');
+              $coustomers_info=DB::table('customers')
+              ->where(['id'=>$uid])
+              ->get();
+            //   prx($coustomers_info);  if user logined in then get the value of login user 
+            $result['customers']['name']=$coustomers_info[0]->name;
+            $result['customers']['email']=$coustomers_info[0]->email;
+            $result['customers']['mobile']=$coustomers_info[0]->mobile;
+            $result['customers']['address']=$coustomers_info[0]->address;
+            $result['customers']['city']=$coustomers_info[0]->city;
+            $result['customers']['state']=$coustomers_info[0]->state;
+            $result['customers']['zip']=$coustomers_info[0]->zip;
+            } else {
+                // FOR GUEST USERS -->  if user not loged in then iniilize the empty value 
+                $result['customers']['name']='';
+                $result['customers']['email']='';
+                $result['customers']['mobile']='';
+                $result['customers']['address']='';
+                $result['customers']['city']='';
+                $result['customers']['state']='';
+                $result['customers']['zip']='';
+            }
+
+            return view('front.checkout',$result); // if found any product then redirect to checkout page
+        } else {
+            return redirect('/');  // if not found any product in cart then redirect to home 
+        }
     }
 }

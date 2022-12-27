@@ -4207,3 +4207,8 @@ img {
 .active_lift_catagory{
   color:chocolate;
 }
+.cart_color{
+  font-size: 15px;
+  color:green;
+  font-weight: bold;
+}
