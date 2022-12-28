@@ -69,7 +69,7 @@
                   <li><a href="javascript:void(0)">My Account</a></li>
 
                   <li class="hidden-xs"><a href="{{url('/cart')}}">My Cart</a></li>
-                  <li class="hidden-xs"><a href="javascript:void(0)">Checkout</a></li>
+                  <!-- <li class="hidden-xs"><a href="javascript:void(0)">Checkout</a></li> -->
                   @if(session()->has('FRONT_USER_LOGIN')!=null)
                   <li><a href="{{url('/logout')}}">LogOut</a></li>
                   @else   

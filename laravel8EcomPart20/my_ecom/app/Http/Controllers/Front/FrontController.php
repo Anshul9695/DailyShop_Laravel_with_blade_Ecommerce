@@ -412,10 +412,10 @@ class FrontController extends Controller
                 $request->session()->put("FRONT_USER_NAME", $result[0]->name);
                 $status = 'success';
                 $msg = '';
-                $getUserTempId=getUserTempId();
+                $getUserTempId = getUserTempId();
                 DB::table('cart')
-                ->where(['user_id' =>$getUserTempId,'user_type'=>'Not-Reg'])
-                ->update(['user_id' =>$result[0]->id,'user_type' => 'Reg']);
+                    ->where(['user_id' => $getUserTempId, 'user_type' => 'Not-Reg'])
+                    ->update(['user_id' => $result[0]->id, 'user_type' => 'Reg']);
             } else {
                 $status = 'errors';
                 $msg = 'Wrong Password Please Try Again !!';
@@ -447,24 +447,24 @@ class FrontController extends Controller
     public function forgot_password(Request $request)
     {
         $result = DB::table('customers')
-        ->where(['email' => $request->str_forgot_email])
-        ->get();
+            ->where(['email' => $request->str_forgot_email])
+            ->get();
         $rand_id = rand(111111111, 999999999);
-    if (isset($result[0])) {
-        DB::table('customers')
-        ->where(['email' => $request->str_forgot_email])
-        ->update(['is_forgot_password' => 1, 'rand_id' => $rand_id]);
+        if (isset($result[0])) {
+            DB::table('customers')
+                ->where(['email' => $request->str_forgot_email])
+                ->update(['is_forgot_password' => 1, 'rand_id' => $rand_id]);
 
-        $data = ['name' => $result[0]->name, 'rand_id' => $rand_id];
-                $user['to'] = $request->str_forgot_email;
-                Mail::send('front/forgot_password', $data, function ($messages) use ($user) {
-                    $messages->to($user['to']);
-                    $messages->subject('Forgot Password');
-                });
-                return response()->json(["status" => "errors", "errors" => "Please check your Email"]);
-    }else{
-        return response()->json(["status" => "errors", "errors" => "Email is not Registred please Register First"]);
-    }
+            $data = ['name' => $result[0]->name, 'rand_id' => $rand_id];
+            $user['to'] = $request->str_forgot_email;
+            Mail::send('front/forgot_password', $data, function ($messages) use ($user) {
+                $messages->to($user['to']);
+                $messages->subject('Forgot Password');
+            });
+            return response()->json(["status" => "errors", "errors" => "Please check your Email"]);
+        } else {
+            return response()->json(["status" => "errors", "errors" => "Email is not Registred please Register First"]);
+        }
     }
 
 
@@ -475,7 +475,7 @@ class FrontController extends Controller
             ->where(['is_forgot_password' => 1])
             ->get();
         if (isset($result[0])) {
-            $request->session()->put("FORGOT_PASSWORD_USER_ID",$result[0]->id);
+            $request->session()->put("FORGOT_PASSWORD_USER_ID", $result[0]->id);
             return view('front.forgot_password_change');
         } else {
             return redirect('/');
@@ -487,47 +487,117 @@ class FrontController extends Controller
         //FORGOT_PASSWORD_USER_ID
 
         DB::table('customers')
-        ->where(['id' => $request->session()->get("FORGOT_PASSWORD_USER_ID")])
-        ->update([
-            'rand_id' => '',
-            'password'=> Crypt::encrypt($request->password),
-            'is_forgot_password' =>0
-        ]);
+            ->where(['id' => $request->session()->get("FORGOT_PASSWORD_USER_ID")])
+            ->update([
+                'rand_id' => '',
+                'password' => Crypt::encrypt($request->password),
+                'is_forgot_password' => 0
+            ]);
         return response()->json(["status" => "success", "errors" => "Password Change"]);
     }
 
-    public function checkout(Request $request){
-        $result['cart_data']=getAddToCartTotalItem();
-// prx($result);
+    public function checkout(Request $request)
+    {
+        $result['cart_data'] = getAddToCartTotalItem();
+        // prx($result);
         if (isset($result['cart_data'][0])) {
 
             if ($request->session()->has('FRONT_USER_LOGIN')) {
                 $uid = $request->session()->get('FRONT_USER_ID');
-              $coustomers_info=DB::table('customers')
-              ->where(['id'=>$uid])
-              ->get();
-            //   prx($coustomers_info);  if user logined in then get the value of login user 
-            $result['customers']['name']=$coustomers_info[0]->name;
-            $result['customers']['email']=$coustomers_info[0]->email;
-            $result['customers']['mobile']=$coustomers_info[0]->mobile;
-            $result['customers']['address']=$coustomers_info[0]->address;
-            $result['customers']['city']=$coustomers_info[0]->city;
-            $result['customers']['state']=$coustomers_info[0]->state;
-            $result['customers']['zip']=$coustomers_info[0]->zip;
+                $coustomers_info = DB::table('customers')
+                    ->where(['id' => $uid])
+                    ->get();
+                //   prx($coustomers_info);  if user logined in then get the value of login user 
+                $result['customers']['name'] = $coustomers_info[0]->name;
+                $result['customers']['email'] = $coustomers_info[0]->email;
+                $result['customers']['mobile'] = $coustomers_info[0]->mobile;
+                $result['customers']['address'] = $coustomers_info[0]->address;
+                $result['customers']['city'] = $coustomers_info[0]->city;
+                $result['customers']['state'] = $coustomers_info[0]->state;
+                $result['customers']['zip'] = $coustomers_info[0]->zip;
             } else {
                 // FOR GUEST USERS -->  if user not loged in then iniilize the empty value 
-                $result['customers']['name']='';
-                $result['customers']['email']='';
-                $result['customers']['mobile']='';
-                $result['customers']['address']='';
-                $result['customers']['city']='';
-                $result['customers']['state']='';
-                $result['customers']['zip']='';
+                $result['customers']['name'] = '';
+                $result['customers']['email'] = '';
+                $result['customers']['mobile'] = '';
+                $result['customers']['address'] = '';
+                $result['customers']['city'] = '';
+                $result['customers']['state'] = '';
+                $result['customers']['zip'] = '';
             }
 
-            return view('front.checkout',$result); // if found any product then redirect to checkout page
+            return view('front.checkout', $result); // if found any product then redirect to checkout page
         } else {
             return redirect('/');  // if not found any product in cart then redirect to home 
         }
+    }
+
+    public function apply_coupon_code(Request $request)
+    {
+        $totalPrice=0;
+        $result=DB::table('coupons')  
+            ->where(['code'=>$request->coupon_code])
+            ->get(); 
+        
+        if(isset($result[0])){
+            $value=$result[0]->value;
+            $type=$result[0]->type;
+            $getAddToCartTotalItem=getAddToCartTotalItem();
+            
+            foreach($getAddToCartTotalItem as $list){
+                $totalPrice=$totalPrice+($list->qty*$list->price);
+            }  
+            if($result[0]->status==1){
+                if($result[0]->is_one_time==1){
+                    $status="error";
+                    $msg="Coupon code already used";    
+                }else{
+                    $min_order_amt=$result[0]->min_order_amt;
+                    if($min_order_amt>0){
+                         
+                        if($min_order_amt<$totalPrice){
+                            $status="success";
+                            $msg="Coupon code applied";
+                        }else{
+                            $status="error";
+                            $msg="Cart amount must be greater then $min_order_amt";
+                        }
+                    }else{
+                         $status="success";
+                         $msg="Coupon code applied";
+                    }
+                }
+            }else{
+                $status="error";
+                $msg="Coupon code deactivated";   
+            }
+            
+        }else{
+           $status="error";
+           $msg="Please enter valid coupon code";
+        }
+        if($status=='success'){
+            if($type=='Value'){
+                $totalPrice=$totalPrice-$value;
+            }if($type=='Per'){
+                $newPrice=($value/100)*$totalPrice;
+                $totalPrice=round($totalPrice-$newPrice);
+            }
+        }
+        return response()->json(['status'=>$status,'msg'=>$msg,'totalPrice'=>$totalPrice]); 
+    }
+    public function remove_coupon_code(Request $request)
+    {
+        $totalPrice=0;
+        $result=DB::table('coupons')  
+        ->where(['code'=>$request->coupon_code])
+        ->get(); 
+        $getAddToCartTotalItem=getAddToCartTotalItem();
+        $totalPrice=0;
+        foreach($getAddToCartTotalItem as $list){
+            $totalPrice=$totalPrice+($list->qty*$list->price);
+        }  
+        
+        return response()->json(['status'=>'success','msg'=>'Coupon code removed','totalPrice'=>$totalPrice]); 
     }
 }

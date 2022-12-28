@@ -2,7 +2,7 @@
 @section('page_title','Checkout')
 @section('container')
 
- <!-- catg header banner section -->
+<!-- catg header banner section -->
 <section id="aa-catg-head-banner">
    <div class="aa-catg-head-banner-area">
      <div class="container">
@@ -23,12 +23,12 @@
               <div class="col-md-8">
                 <div class="checkout-left">
                   <div class="panel-group" id="accordion">
-                  @if(session()->has('FRONT_USER_LOGIN')==null)
+                    @if(session()->has('FRONT_USER_LOGIN')==null)
                     <input type="button" value="Login" class="aa-browse-btn" data-toggle="modal" data-target="#login-modal">  
                     <br/><br/>
                     OR
                     <br/><br/>
-                @endif
+                    @endif
                     <!-- Shipping Address -->
                     <div class="panel panel-default aa-checkout-billaddress">
                       <div class="panel-heading">
@@ -43,7 +43,7 @@
                          <div class="row">
                             <div class="col-md-4">
                               <div class="aa-checkout-single-bill">
-                                <input type="text" placeholder=" Name*" value="{{$customers['name']}}" name="name" required >
+                                <input type="text" placeholder=" Name*" value="{{$customers['name']}}" name="name" required>
                               </div>                             
                             </div>
                             <div class="col-md-4">
@@ -102,37 +102,43 @@
                         </tr>
                       </thead>
                       <tbody>
-                        @php  
+                        @php
                         $totalPrice=0;
-                        @endphp 
-                       @foreach($cart_data as $list)
-                       @php  
-                       $totalPrice=$totalPrice+$list->price * $list->qty;
-                       @endphp
+                        @endphp
+                        @foreach($cart_data as $list)
+
+                        @php 
+                        $totalPrice=$totalPrice+($list->price*$list->qty)
+                        @endphp
 
                         <tr>
-                          <td> <strong>{{$list->name}} x {{$list->qty}}  </strong>
+                          <td>{{$list->name}}  <strong> x  {{$list->qty}}</strong>
                           <br/>
                           <span class="cart_color">{{$list->color}}</span>
                           </td>
-                          <td>INR {{$list->price * $list->qty}}</td>
+                          <td>{{$list->price*$list->qty}}</td>
                         </tr>
-                   @endforeach
+                        @endforeach
                       </tbody>
                       <tfoot>
+                        <tr class="hide show_coupon_box">
+                          <th>Coupon Code <a href="javascript:void(0)" onclick="remove_coupon_code()" class="remove_coupon_code_link">Remove</a></th>
+                          <td id="coupon_code_str"></td>
+                        </tr>
                          <tr>
                           <th>Total</th>
-                          <td>INR {{$totalPrice}} </td>
+                          <td id="total_price">INR {{$totalPrice}}</td>
                         </tr>
                       </tfoot>
                     </table>
                   </div>
-				  <h4>Coupon Code</h4>
-                  <div class="aa-payment-method coupon_code">                    
-                    <input type="text" placeholder="Coupon Code" class="aa-coupon-code">
-					<input type="submit" value="Apply Coupon" class="aa-browse-btn">              
-                  </div>
-				  <br/>
+                  <h4>Coupon Code</h4>
+                    <div class="aa-payment-method coupon_code">                    
+                      <input type="text" placeholder="Coupon Code" class="aa-coupon-code apply_coupon_code_box" name="coupon_code" id="coupon_code">
+                      <input type="button" value="Apply Coupon" class="aa-browse-btn apply_coupon_code_box" onclick="applyCouponCode()">   
+                      <div id="coupon_code_msg"></div>           
+                    </div>
+                  <br/>
                   <h4>Payment Method</h4>
                   <div class="aa-payment-method">                    
                     <label for="cashdelivery"><input type="radio" id="cashdelivery" name="optionsRadios"> Cash on Delivery </label>
@@ -143,10 +149,12 @@
                 </div>
               </div>
             </div>
+            @csrf  
           </form>
          </div>
        </div>
      </div>
    </div>
  </section>
+ 
 @endsection

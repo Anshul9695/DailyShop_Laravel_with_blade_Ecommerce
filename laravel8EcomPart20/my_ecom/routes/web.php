@@ -40,10 +40,15 @@ Route::get('logout', function () {
     session()->forget('FRONT_USER_NAME');
     return redirect('/');
 });
+
+
 Route::get('/verification/{id}',[FrontController::class,'email_verification']); //Email varification 
 Route::post('forgot_password',[FrontController::class,'forgot_password']);  //send link for forgot password
 Route::get('/forgot_password_change/{id}',[FrontController::class,'forgot_password_change']); // veryfy your password and create
 Route::post('change_password_process',[FrontController::class,'change_password_process']);  //change password
+Route::post('apply_coupon_code',[FrontController::class,'apply_coupon_code']);
+Route::post('remove_coupon_code',[FrontController::class,'remove_coupon_code']);
+
 
 Route::get('admin',[AdminController::class,'index']);
 Route::post('admin/auth',[AdminController::class,'auth'])->name('admin.auth');
