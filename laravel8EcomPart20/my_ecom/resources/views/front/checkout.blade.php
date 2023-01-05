@@ -18,7 +18,7 @@
      <div class="row">
        <div class="col-md-12">
         <div class="checkout-area">
-          <form action="">
+          <form id="frmPlaceOrder">
             <div class="row">
               <div class="col-md-8">
                 <div class="checkout-left">
@@ -141,11 +141,13 @@
                   <br/>
                   <h4>Payment Method</h4>
                   <div class="aa-payment-method">                    
-                    <label for="cashdelivery"><input type="radio" id="cashdelivery" name="optionsRadios"> Cash on Delivery </label>
-                    <label for="paypal"><input type="radio" id="paypal" name="optionsRadios" checked> Via Paypal </label>
+                    <label for="cod"><input type="radio" id="cod" name="payment_type" value="COD" checked> Cash on Delivery </label>
+
+                    <label for="instamojo"><input type="radio" id="instamojo" name="payment_type" value="Getway" > InstaMOjo </label>
                     <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark">    
-                    <input type="submit" value="Place Order" class="aa-browse-btn">                
+                    <input type="submit" value="Place Order" class="aa-browse-btn" id="btnPlaceOrder">                
                   </div>
+                <div id="order_place_msg"></div>
                 </div>
               </div>
             </div>
