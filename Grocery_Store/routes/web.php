@@ -18,5 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('admin',[AdminController::class,'index']);
-Route::post('admin/auth',[AdminController::class,'auth'])->name('admin.auth');
-Route::get('admin/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard');
+Route::group(['middleware'=>'admin_auth'],function(){
+    Route::post('admin/auth',[AdminController::class,'auth'])->name('admin.auth');
+    Route::get('admin/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard');
+});
