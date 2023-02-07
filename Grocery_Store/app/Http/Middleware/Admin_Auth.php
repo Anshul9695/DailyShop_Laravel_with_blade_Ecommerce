@@ -16,14 +16,12 @@ class Admin_Auth
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->session()->has('ADMIN_LOGIN')) {
-            // $request->session()->put('ADMIN_LOGIN',true);
-            // $request->session()->put('ADMIN_ID',$result['0']->id);
-            // return view('admin.dashboard');
-          } else {
-             $request->session()->flash('error','Please Enter the valid login Details !!');
-             return redirect('admin');
-          }
+        if($request->session()->has('ADMIN_LOGIN')){
+            
+        }else{
+            $request->session()->flash('error','Access Denied');
+            return redirect('admin');
+        }
         return $next($request);
     }
 }
