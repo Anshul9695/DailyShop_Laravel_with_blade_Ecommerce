@@ -21,7 +21,7 @@ class Admin_Auth
             // $request->session()->put('ADMIN_ID',$result['0']->id);
             // return view('admin.dashboard');
           } else {
-             $request->session()->flash('error','Please Enter the valid login Details !!');
+             $request->session()->flash('error','Access Denied !!');
              return redirect('admin');
           }
         return $next($request);
