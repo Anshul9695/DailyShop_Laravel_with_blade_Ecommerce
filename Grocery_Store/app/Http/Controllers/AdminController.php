@@ -17,25 +17,23 @@ class AdminController extends Controller
  return view('admin.login');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function auth(Request $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        // $result=$request->post();
+        // print_r($result);
+        $email=$request->post('email');
+        $password=$request->post('password');
+       $result=Admin::where(['email'=>$email,'password'=>$password])->get();
+        //    echo "<pre>";
+        //    print_r($result);
+        if (isset($result['0']->id)) {
+          $request->session()->put('ADMIN_LOGIN',true);
+          $request->session()->put('ADMIN_ID',$result['0']->id);
+          return view('admin.dashboard');
+        } else {
+           $request->session()->flash('error','Please Enter the valid login Details !!');
+           return redirect('admin');
+        }
     }
 
     /**
@@ -44,9 +42,9 @@ class AdminController extends Controller
      * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function show(Admin $admin)
+    public function dashboard()
     {
-        //
+        return view('admin/dashboard');
     }
 
     /**
