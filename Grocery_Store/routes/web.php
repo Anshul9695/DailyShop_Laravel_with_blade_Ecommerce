@@ -23,5 +23,16 @@ Route::post('admin/auth',[AdminController::class,'auth'])->name('admin.auth');  
 Route::group(['middleware'=>'admin_auth'],function(){
     Route::get('admin/dashboard',[AdminController::class,'dashboard']);
     Route::get('admin/category',[CatagoryController::class,'index']);
-    Route::get('admin/manage_category',[CatagoryController::class,'manage_category']);
+    Route::get('admin/catagory/manage_category',[CatagoryController::class,'manage_category']); // for get form without data
+    Route::get('admin/catagory/manage_category/{id}',[CatagoryController::class,'manage_category']);  //for edit catagory route . with get form data
+    Route::post('admin/catagory/manage_category_process',[CatagoryController::class,'manage_category_process'])->name('catagory.insert');
+    Route::get('admin/catagory/delete/{id}',[CatagoryController::class,'delete']);
+
+    Route::get('admin/passwordeupdate',[AdminController::class,'updatepassword']); // for creating the hash password incription
+    Route::get('admin/logout', function () {
+      session()->put('ADMIN_LOGIN');
+        session()->put('ADMIN_ID');
+        return view('admin');
+        session()->flash('error','LogOut Successfully..!!');
+    });
 });

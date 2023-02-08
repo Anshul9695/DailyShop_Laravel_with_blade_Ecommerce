@@ -2,7 +2,7 @@
 
 @section('container')
     <h1 class="mb10">Manage Category</h1>
-    <a href="category">
+    <a href="{{url('admin/category')}}">
         <button type="button" class="btn btn-success">
             Back
         </button>
@@ -11,30 +11,33 @@
         <div class="col-md-12">
         <div class="row">
                             <div class="col-lg-12">
+                               
                                 <div class="card">
-                                    <div class="card-header">Credit Card</div>
                                     <div class="card-body">
-                                        <div class="card-title">
-                                            <h3 class="text-center title-2">Pay Invoice</h3>
-                                        </div>
-                                        <hr>
-                                        <form action="" method="post" novalidate="novalidate">
+                                        <form action="{{route('catagory.insert')}}" method="post">
+                                        <input type="hidden" name="id" value="{{$id}}"/>
+                                            @csrf
                                             <div class="form-group">
-                                                <label for="cc-payment" class="control-label mb-1">Payment amount</label>
-                                                <input id="cc-pament" name="cc-payment" type="text" class="form-control" aria-required="true" aria-invalid="false" value="100.00">
+                                                <label for="catagory" class="control-label mb-1">Catagory Name :</label>
+                                                <input id="catagory_name" name="catagory_name" type="text" value="{{$catagory_name}}" class="form-control">
                                             </div>
-                                            <div class="form-group has-success">
-                                                <label for="cc-name" class="control-label mb-1">Name on card</label>
-                                                <input id="cc-name" name="cc-name" type="text" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card"
-                                                    autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error">
-                                                <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
+                                            @error('catagory_name')
+                                            <div class="alert alert-danger" role="alert">
+                                            {{$message}}
                                             </div>
-                                            
+                                            @enderror
+                                            <div class="form-group">
+                                                <label for="catagory_slug" class="control-label mb-1">Catagory Slug :</label>
+                                                <input id="catagory_slug" name="catagory_slug" type="text" value="{{$catagory_slug}}" class="form-control">
+                                            </div>
+                                            @error('catagory_slug')
+                                            <div class="alert alert-danger" role="alert">
+                                            {{$message}}
+                                             </div>
+                                            @enderror
                                             <div>
                                                 <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
-                                                    <i class="fa fa-lock fa-lg"></i>&nbsp;
-                                                    <span id="payment-button-amount">Pay $100.00</span>
-                                                    <span id="payment-button-sending" style="display:none;">Sending…</span>
+                                                   Submit
                                                 </button>
                                             </div>
                                         </form>
