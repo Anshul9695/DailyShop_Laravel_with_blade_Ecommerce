@@ -28,6 +28,13 @@ Route::group(['middleware'=>'admin_auth'],function(){
     Route::post('admin/catagory/manage_category_process',[CatagoryController::class,'manage_category_process'])->name('catagory.insert');
     Route::get('admin/catagory/delete/{id}',[CatagoryController::class,'delete']);
 
+    Route::get('admin/coupon/couponList',[CouponController::class,'couponList']); //for the all coupon list
+    Route::get('admin/coupon/manage_coupon',[CouponController::class,'manage_coupon']);// for getting manage coupon form
+    Route::get('admin/coupon/delete/{id}',[CouponController::class,'delete']);
+    Route::post('admin/coupon/manage_coupon_process',[CouponController::class,'manage_coupon_process']); //for insert the coupon in database
+    Route::get('admin/coupon/manage_coupon/{id}',[CouponController::class,'manage_coupon']); //with data is id found
+   
+
     Route::get('admin/passwordeupdate',[AdminController::class,'updatepassword']); // for creating the hash password incription
     Route::get('admin/logout', function () {
       session()->put('ADMIN_LOGIN');
